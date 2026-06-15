@@ -1,0 +1,44 @@
+<div class="page-container">
+    <div class="page-header-container">
+        <div class="page-title-section">
+            <h2>Dashboard</h2>
+            <p class="page-subtitle">Overview of hospital data and statistics</p>
+        </div>
+    </div>
+
+    <div class="stats-grid-row">
+
+        <div class="metric-card">
+            <span class="metric-label">Patients</span>
+            <div class="metric-value-display">
+                {{ dashboard()?.totalPatients || 0 }}
+            </div>
+            <p class="metric-helper-text">Total Registered Patients</p>
+        </div>
+
+        <div class="metric-card">
+            <span class="metric-label">Doctors</span>
+            <div class="metric-value-display">
+                {{ dashboard()?.totalDoctors || 0 }}
+            </div>
+            <p class="metric-helper-text">Active Doctors</p>
+        </div>
+
+        <div class="metric-card">
+            <span class="metric-label">Employees</span>
+            <div class="metric-value-display">
+                {{ dashboard()?.totalEmployees || 0 }}
+            </div>
+            <p class="metric-helper-text">Hospital Staff</p>
+        </div>
+
+        <div class="metric-card alert-state-card" [class.has-pending]="(dashboard()?.pendingApprovals || 0) > 0">
+            <span class="metric-label">Pending Approvals</span>
+            <div class="metric-value-display">
+                {{ dashboard()?.pendingApprovals || 0 }}
+            </div>
+            <p class="metric-helper-text">Requires Review</p>
+        </div>
+
+    </div>
+</div>

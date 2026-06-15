@@ -1,0 +1,433 @@
+:host {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* ==================================================
+   PAGE
+================================================== */
+
+.join-page {
+    min-height: 100vh;
+    background: #F1EFE8;
+    padding: 32px;
+}
+
+/* ==================================================
+   LAYOUT
+================================================== */
+
+.join-container {
+    max-width: 1400px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: 1fr 720px;
+
+    background: #ffffff;
+
+    border: 0.5px solid #D3D1C7;
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+/* ==================================================
+   BRANDING
+================================================== */
+
+.join-branding {
+    background: #ffffff;
+
+    border-right: 0.5px solid #D3D1C7;
+
+    display: flex;
+    align-items: center;
+
+    padding: 64px;
+}
+
+.branding-content {
+    max-width: 480px;
+}
+
+.brand-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 8px 14px;
+
+    border-radius: 9999px;
+
+    background: #E6F1FB;
+
+    color: #185FA5;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    margin-bottom: 24px;
+}
+
+.join-branding h1 {
+    font-size: 32px;
+    font-weight: 700;
+
+    color: #2C2C2A;
+
+    margin-bottom: 18px;
+
+    letter-spacing: -0.5px;
+}
+
+.join-branding p {
+    font-size: 14px;
+    line-height: 1.8;
+
+    color: #5F5E5A;
+}
+
+/* ==================================================
+   RIGHT PANEL
+================================================== */
+
+.join-panel {
+    padding: 40px;
+}
+
+.join-card {
+    width: 100%;
+}
+
+/* ==================================================
+   HEADER
+================================================== */
+
+.join-header {
+    margin-bottom: 32px;
+}
+
+.join-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+
+    color: #2C2C2A;
+
+    margin-bottom: 8px;
+}
+
+.join-header p {
+    color: #5F5E5A;
+    font-size: 14px;
+}
+
+/* ==================================================
+   EMAIL STEP
+================================================== */
+
+.email-step {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-message {
+    padding: 12px 14px;
+
+    border-radius: 8px;
+
+    background: #E6F1FB;
+
+    color: #185FA5;
+
+    font-size: 13px;
+}
+
+/* ==================================================
+   FORM
+================================================== */
+
+.join-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.form-section {
+    padding-bottom: 24px;
+
+    border-bottom: 0.5px solid #D3D1C7;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.form-section h3 {
+    font-size: 18px;
+    font-weight: 600;
+
+    color: #2C2C2A;
+
+    margin-bottom: 20px;
+}
+
+/* ==================================================
+   GRID
+================================================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+.full-width {
+    grid-column: span 2;
+}
+
+/* ==================================================
+   FIELD
+================================================== */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 500;
+
+    color: #444441;
+}
+
+/* ==================================================
+   INPUTS
+================================================== */
+
+input,
+select {
+    width: 100%;
+
+    height: 44px;
+
+    border: 1px solid #D3D1C7;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    padding: 0 14px;
+
+    font-size: 14px;
+
+    color: #2C2C2A;
+
+    transition: all 0.2s ease;
+}
+
+input::placeholder {
+    color: #888780;
+}
+
+input:hover,
+select:hover {
+    border-color: #B4B2A9;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+
+    box-shadow: 0 0 0 3px rgba(24, 95, 165, 0.20);
+
+    border-color: #185FA5;
+}
+
+/* ==================================================
+   READONLY
+================================================== */
+
+input[readonly] {
+    background: #F8F8F5;
+
+    color: #5F5E5A;
+
+    cursor: not-allowed;
+}
+
+/* ==================================================
+   ERROR
+================================================== */
+
+.error {
+    font-size: 12px;
+
+    color: #A32D2D;
+
+    margin-top: -2px;
+}
+
+/* ==================================================
+   BUTTON
+================================================== */
+
+.primary-btn {
+    height: 46px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #185FA5;
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.primary-btn:hover:not(:disabled) {
+    background: #0C447C;
+}
+
+.primary-btn:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.primary-btn:disabled {
+    background: #85B7EB;
+    cursor: not-allowed;
+}
+
+/* ==================================================
+   SCROLLABLE LONG FORMS
+================================================== */
+
+.join-form {
+    max-height: 75vh;
+    overflow-y: auto;
+
+    padding-right: 8px;
+}
+
+.join-form::-webkit-scrollbar {
+    width: 6px;
+}
+
+.join-form::-webkit-scrollbar-thumb {
+    background: #D3D1C7;
+    border-radius: 999px;
+}
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media (max-width: 992px) {
+
+    .join-container {
+        grid-template-columns: 1fr;
+    }
+
+    .join-branding {
+        display: none;
+    }
+
+    .join-panel {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full-width {
+        grid-column: span 1;
+    }
+
+    .join-page {
+        padding: 16px;
+    }
+
+    .join-panel {
+        padding: 20px;
+    }
+
+    .join-header h2 {
+        font-size: 20px;
+    }
+}
+.success-card {
+
+    width: 100%;
+    max-width: 420px;
+
+    margin: auto;
+
+    background: #ffffff;
+
+    border: 0.5px solid #D3D1C7;
+    border-radius: 12px;
+
+    padding: 40px 32px;
+
+    text-align: center;
+}
+
+.success-icon {
+
+    width: 72px;
+    height: 72px;
+
+    margin: 0 auto 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9999px;
+
+    background: #EAF3DE;
+
+    color: #3B6D11;
+
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.success-card h2 {
+
+    font-size: 24px;
+    font-weight: 700;
+
+    color: #2C2C2A;
+
+    margin-bottom: 16px;
+}
+
+.success-card p {
+
+    color: #5F5E5A;
+
+    line-height: 1.7;
+
+    margin-bottom: 12px;
+}
+
+.success-card .primary-btn {
+
+    width: 100%;
+
+    margin-top: 24px;
+}

@@ -1,0 +1,280 @@
+/* ==========================================
+   APPOINTMENT FORM
+========================================== */
+
+.appointment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-card {
+    background: #FFFFFF;
+}
+
+.form-section h3 {
+    margin: 0 0 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2C2C2A;
+}
+
+/* ==========================================
+   GRID ARCHITECTURE
+========================================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #444441;
+}
+
+/* ==========================================
+   INPUTS & FORM CONTROLS
+========================================== */
+
+input,
+select,
+textarea {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    border: 1px solid #D3D1C7;
+    border-radius: 8px;
+    background: #FFFFFF;
+    font-size: 14px;
+    color: #2C2C2A;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #185FA5;
+    box-shadow: 0 0 0 3px rgba(24, 95, 165, 0.15);
+}
+
+/* ==========================================
+   LOOKUP DROPDOWN
+========================================== */
+
+.lookup-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #FFFFFF;
+    border: 1px solid #D3D1C7;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 100;
+}
+
+.lookup-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid #F1EFE8;
+    transition: background 0.2s;
+}
+
+.lookup-item:last-child {
+    border-bottom: none;
+}
+
+.lookup-item:hover {
+    background: #F8F8F5;
+}
+
+.lookup-item strong {
+    display: block;
+    font-size: 14px;
+    color: #2C2C2A;
+}
+
+.lookup-item small {
+    font-size: 12px;
+    color: #777777;
+}
+
+/* ==========================================
+   SELECTED CARD BADGE
+========================================== */
+
+.selected-card {
+    height: 52px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    border: 1px solid #D3D1C7;
+    border-radius: 8px;
+    background: #F8F8F5;
+}
+
+.selected-card strong {
+    display: block;
+    font-size: 14px;
+    color: #2C2C2A;
+}
+
+.selected-card small {
+    color: #666666;
+    font-size: 12px;
+}
+
+.remove-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+    color: #666666;
+    border-radius: 50%;
+}
+
+.remove-btn:hover {
+    background: #ECEAE2;
+}
+
+/* ==========================================
+   BOOK MY SHOW SLOT MATRIX
+========================================== */
+
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+    gap: 12px;
+    padding: 14px;
+    background: #F8F8F5;
+    border: 1px solid #D3D1C7;
+    border-radius: 8px;
+}
+
+.slot-btn {
+    height: 42px;
+    border: 1px solid #22C55E;
+    border-radius: 8px;
+    background: #F0FDF4;
+    color: #166534;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.slot-btn:hover:not(:disabled) {
+    background: #DCFCE7;
+    border-color: #16A34A;
+}
+
+/* State 1: Active Explicit Selection (Blue) */
+.slot-btn.selected {
+    background: #185FA5 !important;
+    border-color: #185FA5 !important;
+    color: #FFFFFF !important;
+}
+
+/* State 2: Expired Time Boundaries (Disabled Gray) */
+.slot-btn.past,
+.slot-btn:disabled {
+    background: #EFEFEF !important;
+    border-color: #D3D1C7 !important;
+    color: #9E9D98 !important;
+    text-decoration: line-through;
+    cursor: not-allowed;
+}
+
+/* ==========================================
+   INFO / LOADING / FEEDBACK
+========================================== */
+
+.info-message,
+.loading-state {
+    padding: 14px;
+    border-radius: 8px;
+    background: #F8F8F5;
+    border: 1px solid #D3D1C7;
+    font-size: 14px;
+    color: #5F5E5A;
+}
+
+/* ==========================================
+   ERRORS & VALIDATION
+========================================== */
+
+.error-text {
+    font-size: 12px;
+    color: #B3261E;
+}
+
+/* ==========================================
+   FORM FOOTER TRIGGERS
+========================================== */
+
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+.primary-btn {
+    height: 44px;
+    padding: 0 24px;
+    border: none;
+    border-radius: 8px;
+    background: #185FA5;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.primary-btn:hover:not(:disabled) {
+    background: #0F4C85;
+}
+
+.primary-btn:disabled {
+    background: #D3D1C7;
+    color: #888780;
+    cursor: not-allowed;
+}
+
+/* ==========================================
+   RESPONSIVE MEDIA QUERIES
+========================================== */
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full-width {
+        grid-column: auto;
+    }
+
+    .form-footer {
+        justify-content: stretch;
+    }
+
+    .form-footer .primary-btn {
+        width: 100%;
+    }
+}

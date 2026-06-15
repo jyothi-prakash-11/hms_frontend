@@ -1,0 +1,141 @@
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Employees</h1>
+            <p>Manage hospital employees and staff</p>
+        </div>
+        <button class="primary-btn" type="button" (click)="onAddEmployee()">
+            Add Employee
+        </button>
+    </div>
+
+    <div class="content-card">
+        <div class="section-header">
+            <h3>Employee Directory</h3>
+        </div>
+
+        @if (employees().length === 0) {
+        <div class="empty-state">
+            <h3>No Employees Found</h3>
+            <p>Create your first employee record.</p>
+        </div>
+        } @else {
+        <div class="employees-header">
+            <div>Employee Code</div>
+            <div>Name</div>
+            <div>Email</div>
+            <div>Phone</div>
+            <div>Department</div>
+        </div>
+
+        @for (employee of employees(); track employee.employeeCode) {
+        <div class="employee-card">
+            <div class="employee-summary" (click)="toggleEmployee(employee.employeeCode)">
+                <div class="employee-col">
+                    {{ employee.employeeCode }}
+                </div>
+                <div class="employee-col employee-name">
+                    {{ employee.userId.firstName }} {{ employee.userId.lastName }}
+                </div>
+                <div class="employee-col">
+                    {{ employee.userId.email }}
+                </div>
+                <div class="employee-col">
+                    {{ employee.userId.phone }}
+                </div>
+                <div class="employee-col">
+                    {{ employee.department }}
+                </div>
+            </div>
+
+            @if (expandedEmployeeCode() === employee.employeeCode) {
+            <div class="employee-details">
+                <div class="details-section">
+                    <h4>Employee Information</h4>
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <label>Employee Code</label>
+                            <span>{{ employee.employeeCode }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Designation</label>
+                            <span>{{ employee.designation }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Department</label>
+                            <span>{{ employee.department }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Joining Date</label>
+                            <span>{{ employee.joiningDate }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+        }
+        }
+    </div>
+</div>
+
+@if (showEmailForm() || showEmployeeForm()) {
+<div class="modal-backdrop">
+    <div class="modal">
+        <button type="button" class="modal-close-btn" (click)="closeEmployeeModal()" aria-label="Close modal">
+            &times;
+        </button>
+
+        @if (showEmailForm()) {
+        <div class="modal-header">
+            <div>
+                <h2>Add Employee</h2>
+                <p>Verify employee email before registration</p>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-card">
+                <div class="form-group">
+                    <label for="verificationEmail">Email Address</label>
+                    <input id="verificationEmail" type="email" [formControl]="emailControl"
+                        placeholder="name@hospital.com">
+                </div>
+                <button class="primary-btn" type="button" (click)="checkEmail()">
+                    Proceed
+                </button>
+            </div>
+        </div>
+        }
+
+        @if (showEmployeeForm()) {
+        <div class="modal-header">
+            <div>
+                <h2>Add Employee</h2>
+                <p>Create a new employee profile</p>
+            </div>
+        </div>
+
+        <div class="modal-body modal-body--scrollable">
+            <form [formGroup]="employeeForm" (ngSubmit)="createEmployee()" class="employee-form">
+
+                <app-user-form [form]="employeeForm.controls.userInfo" [roles]="employeeRoles()">
+                </app-user-form>
+
+                <app-employee-form [form]="employeeForm.controls.employeeInfo">
+                </app-employee-form>
+
+                <div class="form-footer">
+                    <button type="button" class="secondary-btn" (click)="closeEmployeeModal()">
+                        Cancel
+                    </button>
+                    <button type="submit" class="primary-btn">
+                        Create Employee
+                    </button>
+                </div>
+            </form>
+        </div>
+        }
+    </div>
+</div>
+}

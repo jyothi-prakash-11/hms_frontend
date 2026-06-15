@@ -1,0 +1,164 @@
+/* ==========================================
+   PROFILE WRAPPER & INTERACTIVE TRIGGER
+========================================== */
+.profile-section {
+  position: relative;
+  display: inline-block;
+  margin-left: auto;
+}
+
+.profile-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.profile-button:hover {
+  background-color: #f7fafc;
+}
+
+.user-badge-role {
+  background-color: #e6f1fb;
+  color: #185fa5;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.profile-meta-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 1px;
+}
+
+.user-display-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2d3748;
+  white-space: nowrap;
+}
+
+.user-display-email {
+  font-size: 0.75rem;
+  color: #718096;
+  white-space: nowrap;
+}
+
+/* Rounded Profile Icon Avatar Layout */
+.profile-avatar-icon {
+  width: 36px;
+  height: 36px;
+  background-color: #185fa5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   FLOATING EXPANDED CONTEXT CARD (PINNED RIGHT)
+========================================== */
+.profile-card {
+  position: absolute;
+  top: 120%;
+  right: 0; /* Anchor securely to the right to stop horizontal layout clipping */
+  width: 320px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  padding: 20px;
+  z-index: 2000;
+  box-sizing: border-box;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: 1px solid #edf2f7;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+}
+
+.profile-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.role-badge {
+  font-size: 0.8rem;
+  color: #718096;
+}
+
+/* ==========================================
+   METADATA PROPERTY GRID DISPLAY MAP
+========================================== */
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.grid-info-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.grid-info-cell.full-width {
+  grid-column: span 2;
+}
+
+.grid-info-cell label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #a0aec0;
+}
+
+.grid-info-cell p {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #2d3748;
+  word-break: break-all;
+}
+
+.grid-info-cell .code-highlight {
+  font-family: monospace;
+  font-weight: 600;
+  color: #1a202c;
+}
+
+/* ==========================================
+   TRANSITION KEYFRAME ANIMATIONS
+========================================== */
+@keyframes dropdownFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: dropdownFadeIn 0.15s ease-out;
+}

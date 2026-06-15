@@ -1,17 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginRequest } from '../auth.model';
 import { AuthService } from '../auth.service';
 import { Router, RouterLink } from '@angular/router';
+import ToastService from '../../../shared/components/toast/toast.service';
+import { ToastComponent } from "../../../shared/components/toast/toast";
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, ReactiveFormsModule, RouterLink],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, RouterLink, ToastComponent],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrls: ['./login.css'],
 })
 export class Login {
-  constructor(private readonly authService: AuthService, private readonly router: Router) { }
+  constructor(private readonly authService: AuthService, private readonly router: Router, private toastService: ToastService) { }
   errorMessage = '';
   loginForm = new FormGroup({
     email: new FormControl('', {
@@ -30,13 +33,16 @@ export class Login {
       next: (res) => {
         console.log("Login response:", res);
         console.log("LocalStorage after login:", localStorage.getItem('token'), localStorage.getItem('role'));
-        const path = this.authService.getDashboardByRole(res.data.role);
+        const path = this.authService.getDashboardByRole(res.data.role) + '/dashboard';
         console.log("Navigating to:", path);
+        this.toastService.success('welcome back');
         this.router.navigateByUrl(path);
       },
       error: (err) => {
         console.error("Login error:", err);
         const errorMsg = err?.error?.message || err?.message || 'Login failed';
+        this.toastService.error(errorMsg);
+        console.log(errorMsg);
         this.errorMessage = errorMsg;
       }
     });

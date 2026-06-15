@@ -1,0 +1,327 @@
+<div class="page">
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>
+                Pending Approvals
+            </h1>
+
+            <p>
+                Review and approve employee onboarding requests
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- EMPTY STATE -->
+
+    @if(approvals().length === 0){
+
+    <div class="empty-state">
+
+        <h3>
+            No Pending Approvals
+        </h3>
+
+        <p>
+            All requests have been reviewed.
+        </p>
+
+    </div>
+
+    }
+
+    @else {
+
+    <div class="content-card">
+
+        <div class="section-header">
+
+            <h3>
+                Pending Approval Requests
+            </h3>
+
+        </div>
+
+        <!-- TABLE HEADER -->
+
+        <div class="approvals-header">
+
+            <div>Employee</div>
+            <div>Department</div>
+            <div>Role</div>
+            <div>Status</div>
+            <div>Actions</div>
+
+        </div>
+
+        @for (approval of approvals(); track approval._id) {
+
+        <div class="approval-row">
+
+            <!-- SUMMARY -->
+
+            <div class="approval-summary" (click)="toggleApproval(approval._id)">
+
+                <div class="approval-col employee-col">
+
+                    <div class="employee-avatar">
+
+                        {{ approval.firstName.charAt(0) }}
+
+                    </div>
+
+                    <div>
+
+                        <div class="employee-name">
+
+                            {{ approval.firstName }}
+                            {{ approval.lastName }}
+
+                        </div>
+
+                        <div class="employee-email">
+
+                            {{ approval.email }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="approval-col">
+
+                    {{ approval.department }}
+
+                </div>
+
+                <div class="approval-col">
+
+                    {{ approval.roleId.name }}
+
+                </div>
+
+                <div class="approval-col">
+
+                    <span class="status-badge">
+
+                        {{ approval.approvalStatus }}
+
+                    </span>
+
+                </div>
+
+                <div class="approval-actions">
+
+                    <button class="secondary-btn" (click)="onReject(approval._id); $event.stopPropagation()">
+
+                        Reject
+
+                    </button>
+
+                    <button class="primary-btn" (click)="onApprove(approval._id); $event.stopPropagation()">
+
+                        Approve
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- DETAILS -->
+
+            @if(expandedApprovalId() === approval._id){
+
+            <div class="approval-details">
+
+                <div class="details-section">
+
+                    <h4>
+                        Employee Information
+                    </h4>
+
+                    <div class="details-grid">
+
+                        <div class="detail-item">
+
+                            <label>Email</label>
+
+                            <span>
+
+                                {{ approval.email }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="detail-item">
+
+                            <label>Phone</label>
+
+                            <span>
+
+                                {{ approval.phone }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="detail-item">
+
+                            <label>Department</label>
+
+                            <span>
+
+                                {{ approval.department }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="detail-item">
+
+                            <label>Designation</label>
+
+                            <span>
+
+                                {{ approval.designation }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="detail-item">
+
+                            <label>Joining Date</label>
+
+                            <span>
+
+                                {{ approval.joiningDate | date:'dd MMM yyyy' }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="detail-item">
+
+                            <label>Role</label>
+
+                            <span>
+
+                                {{ approval.roleId.name }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                @if(approval.roleId.name === 'Doctor'){
+
+                <div class="details-section">
+
+                    <h4>
+                        Doctor Information
+                    </h4>
+
+                    <div class="details-grid">
+
+                        <div class="detail-item">
+
+                            <label>
+                                Specialization
+                            </label>
+
+                            <span>
+
+                                {{ approval.specialization }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="detail-item">
+
+                            <label>
+                                Qualification
+                            </label>
+
+                            <span>
+
+                                {{ approval.qualification }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="detail-item">
+
+                            <label>
+                                Consultation Fee
+                            </label>
+
+                            <span>
+
+                                ₹{{ approval.consultationFee }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="detail-item">
+
+                            <label>
+                                Registration Number
+                            </label>
+
+                            <span>
+
+                                {{ approval.medicalRegistrationNo }}
+
+                            </span>
+
+                        </div>
+
+                        <div class="detail-item">
+
+                            <label>
+                                Experience
+                            </label>
+
+                            <span>
+
+                                {{ approval.experienceYears }}
+                                Years
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+            }
+
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+</div>

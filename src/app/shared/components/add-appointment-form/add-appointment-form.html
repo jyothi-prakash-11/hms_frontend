@@ -1,0 +1,139 @@
+<form [formGroup]="appointmentForm" (ngSubmit)="createAppointment()" class="appointment-form">
+    <div class="form-card">
+        <div class="form-section">
+            <h3>Appointment Information</h3>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Patient</label>
+
+                    @if (!selectedPatient()) {
+                    <input type="text" [formControl]="patientSearchControl"
+                        placeholder="Search by UHID or patient name">
+
+                    @if (filteredPatients().length > 0) {
+                    <div class="lookup-dropdown">
+                        @for (patient of filteredPatients(); track patient._id) {
+                        <div class="lookup-item" (click)="selectPatient(patient)">
+                            <strong>
+                                {{ patient.userId?.firstName }} {{ patient.userId?.lastName }}
+                            </strong>
+                            <small>
+                                {{ patient.UHID }} • {{ patient.userId?.email }}
+                            </small>
+                        </div>
+                        }
+                    </div>
+                    }
+                    } @else {
+                    <div class="selected-card">
+                        <div>
+                            <strong>
+                                {{ selectedPatient()?.userId?.firstName }} {{ selectedPatient()?.userId?.lastName }}
+                            </strong>
+                            <small>UHID: {{ selectedPatient()?.UHID }}</small>
+                        </div>
+                        <button type="button" class="remove-btn" (click)="clearPatient()">×</button>
+                    </div>
+                    }
+
+                    @if (appointmentForm.controls.patientId.touched && appointmentForm.controls.patientId.invalid) {
+                    <small class="error-text">Please select a patient.</small>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label>Doctor</label>
+
+                    @if (!selectedDoctor()) {
+                    <input type="text" [formControl]="doctorSearchControl"
+                        placeholder="Search by doctor name or specialization">
+
+                    @if (filteredDoctors().length > 0) {
+                    <div class="lookup-dropdown">
+                        @for (doctor of filteredDoctors(); track doctor._id) {
+                        <div class="lookup-item" (click)="selectDoctor(doctor)">
+                            <strong>
+                                Dr. {{ doctor.employeeId?.userId?.firstName }} {{ doctor.employeeId?.userId?.lastName }}
+                            </strong>
+                            <small>{{ doctor.specialization }}</small>
+                        </div>
+                        }
+                    </div>
+                    }
+                    } @else {
+                    <div class="selected-card">
+                        <div>
+                            <strong>
+                                Dr. {{ selectedDoctor()?.employeeId?.userId?.firstName }} {{
+                                selectedDoctor()?.employeeId?.userId?.lastName }}
+                            </strong>
+                            <small>{{ selectedDoctor()?.specialization }}</small>
+                        </div>
+                        <button type="button" class="remove-btn" (click)="clearDoctor()">×</button>
+                    </div>
+                    }
+
+                    @if (appointmentForm.controls.doctorId.touched && appointmentForm.controls.doctorId.invalid) {
+                    <small class="error-text">Please select a doctor.</small>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label>Appointment Date</label>
+                    <input type="date" formControlName="appointmentDate" [min]="minDate()" [max]="maxDate()">
+
+                    @if (appointmentForm.controls.appointmentDate.touched &&
+                    appointmentForm.controls.appointmentDate.invalid) {
+                    <small class="error-text">Date is required.</small>
+                    }
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Available Time Slots</label>
+
+                    @if (isLoadingSlots()) {
+                    <div class="loading-state">Loading available slots...</div>
+                    }
+                    @else if (!appointmentForm.controls.doctorId.value ||
+                    !appointmentForm.controls.appointmentDate.value) {
+                    <div class="info-message">Select a doctor and date to view available slots.</div>
+                    }
+                    @else if (availableSlots().length === 0) {
+                    <div class="info-message">No slots available.</div>
+                    }
+                    @else {
+                    <div class="slots-grid">
+                        @for (slot of availableSlots(); track slot) {
+                        @let isPast = isSlotPast(slot);
+                        @let selected = appointmentForm.value.appointmentTime === slot;
+
+                        <button type="button" class="slot-btn" [class.past]="isPast" [class.selected]="selected"
+                            [disabled]="isPast" (click)="appointmentForm.controls.appointmentTime.setValue(slot)">
+                            {{ slot }}
+                        </button>
+                        }
+                    </div>
+                    }
+
+                    @if (appointmentForm.controls.appointmentTime.touched &&
+                    appointmentForm.controls.appointmentTime.invalid) {
+                    <small class="error-text">Please select a time slot.</small>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="form-footer">
+        <button type="submit" class="primary-btn" [disabled]="appointmentForm.invalid || isCreatingAppointment()">
+            @if (isCreatingAppointment()) {
+            Creating Appointment...
+            } @else {
+            Create Appointment
+            }
+        </button>
+    </div>
+</form>

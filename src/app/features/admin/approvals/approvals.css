@@ -1,0 +1,364 @@
+/* ==========================================
+   PAGE
+========================================== */
+
+.page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* ==========================================
+   PAGE HEADER
+========================================== */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2C2C2A;
+}
+
+.page-header p {
+    margin-top: 4px;
+    font-size: 14px;
+    color: #5F5E5A;
+}
+
+/* ==========================================
+   CONTENT CARD
+========================================== */
+
+.content-card {
+    background: #FFFFFF;
+    border: 0.5px solid #D3D1C7;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.section-header {
+    padding: 20px 24px;
+}
+
+.section-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2C2C2A;
+}
+
+/* ==========================================
+   TABLE HEADER
+========================================== */
+
+.approvals-header {
+
+    display: grid;
+
+    grid-template-columns:
+        2fr
+        1fr
+        1fr
+        120px
+        180px;
+
+    padding: 14px 24px;
+
+    background: #F1EFE8;
+
+    border-top: .5px solid #D3D1C7;
+    border-bottom: .5px solid #D3D1C7;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #5F5E5A;
+}
+
+/* ==========================================
+   ROW
+========================================== */
+
+.approval-row:not(:last-child) {
+    border-bottom: .5px solid #D3D1C7;
+}
+
+.approval-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        2fr
+        1fr
+        1fr
+        120px
+        180px;
+
+    align-items: center;
+
+    min-height: 72px;
+
+    padding: 0 24px;
+
+    cursor: pointer;
+
+    transition: background .2s ease;
+}
+
+.approval-summary:hover {
+    background: #F8F8F5;
+}
+
+.approval-col {
+    font-size: 14px;
+    color: #2C2C2A;
+}
+
+/* ==========================================
+   EMPLOYEE
+========================================== */
+
+.employee-col {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.employee-avatar {
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #E6F1FB;
+
+    color: #185FA5;
+
+    font-weight: 700;
+}
+
+.employee-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2C2C2A;
+}
+
+.employee-email {
+    font-size: 13px;
+    color: #5F5E5A;
+}
+
+/* ==========================================
+   STATUS
+========================================== */
+
+.status-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px 12px;
+
+    border-radius: 999px;
+
+    background: #FFF4D6;
+
+    color: #8A5A00;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ==========================================
+   ACTIONS
+========================================== */
+
+.approval-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* ==========================================
+   DETAILS
+========================================== */
+
+.approval-details {
+
+    background: #FAFAF8;
+
+    border-top: .5px solid #D3D1C7;
+
+    padding: 24px;
+}
+
+.details-section:not(:last-child) {
+    margin-bottom: 24px;
+}
+
+.details-section h4 {
+
+    margin: 0 0 16px;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    color: #2C2C2A;
+}
+
+.details-grid {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 20px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-item label {
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    color: #888780;
+
+    font-weight: 500;
+}
+
+.detail-item span {
+
+    font-size: 14px;
+
+    color: #2C2C2A;
+}
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.primary-btn {
+
+    height: 36px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 0 14px;
+
+    background: #185FA5;
+
+    color: white;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.primary-btn:hover {
+    background: #0C447C;
+}
+
+.secondary-btn {
+
+    height: 36px;
+
+    border: 1px solid #D3D1C7;
+
+    border-radius: 8px;
+
+    background: white;
+
+    color: #185FA5;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    padding: 0 14px;
+
+    cursor: pointer;
+}
+
+.secondary-btn:hover {
+    background: #E6F1FB;
+}
+
+/* ==========================================
+   EMPTY STATE
+========================================== */
+
+.empty-state {
+
+    background: white;
+
+    border: .5px solid #D3D1C7;
+
+    border-radius: 12px;
+
+    padding: 64px 24px;
+
+    text-align: center;
+}
+
+.empty-state h3 {
+
+    margin: 0 0 8px;
+
+    color: #2C2C2A;
+}
+
+.empty-state p {
+
+    margin: 0;
+
+    color: #5F5E5A;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+
+    .approvals-header {
+        display: none;
+    }
+
+    .approval-summary {
+
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+
+        padding: 16px;
+    }
+
+    .approval-actions {
+        justify-content: flex-start;
+    }
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+}

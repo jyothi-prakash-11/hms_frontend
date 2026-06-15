@@ -1,0 +1,7 @@
+1.Employee login 
+2.public join us user flow 
+3.admin adding the employee flow 
+4.appointments creation by allowed roles
+5.reset password
+
+1.admin has full control over employees

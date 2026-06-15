@@ -1,26 +1,35 @@
 import { Routes } from "@angular/router";
-import { Admin } from "./layout/admin";
-import { Employees } from "./pages/employees/employees";
-import { Doctor } from "./pages/doctor/doctor";
-import { Patients } from "./pages/patients/patients";
+import { Layout } from "../../core/layout/layout/layout";
+import { Dashboard } from "./dashboard/dashboard";
+import { Patient } from "../patient/patient";
+import { Approvals } from "./approvals/approvals";
+import { Doctor } from "../doctor/doctor";
+import { Employee } from "../employee/employee";
+import { Appointments } from "../appointments/appointments";
 
 export const ADMIN_ROUTES: Routes = [
     {
-        path: '',
-        component: Admin,
-        children: [
-            {
-                path: 'employees',
-                component: Employees
-            },
-            {
-                path: 'doctors',
-                component: Doctor
-            },
-            {
-                path: 'patients',
-                component: Patients
-            }
-        ]
+        path: 'dashboard',
+        component: Dashboard
+    },
+    {
+        path: 'patients',
+        component: Patient
+    },
+    {
+        path: 'approvals',
+        component: Approvals
+    },
+    {
+        path: 'doctors',
+        component: Doctor
+    },
+    {
+        path: 'employees',
+        component: Employee
+    },
+    {
+        path: 'appointments',
+        component: Appointments
     }
 ]

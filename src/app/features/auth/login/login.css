@@ -1,51 +1,53 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 
 :host {
-    font-family: 'Inter', sans-serif;
+    display: block;
+    font-family: 'DM Sans', sans-serif;
 }
 
-/* =========================================================
-   ROOT LAYOUT
-========================================================= */
+/* ==========================================
+   PAGE
+========================================== */
 
 .login-page {
     min-height: 100vh;
-    background: #f8fafc;
+    background: #F1EFE8;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+
+    padding: 32px;
 }
+
+/* ==========================================
+   CONTAINER
+========================================== */
 
 .login-container {
     width: 100%;
-    max-width: 1180px;
-    min-height: 700px;
+    max-width: 1200px;
+    min-height: 680px;
+
+    display: grid;
+    grid-template-columns: 1fr 480px;
 
     background: #ffffff;
 
-    border-radius: 24px;
+    border: 0.5px solid #D3D1C7;
+    border-radius: 12px;
+
     overflow: hidden;
-
-    display: grid;
-    grid-template-columns: 1fr 520px;
-
-    border: 1px solid #e2e8f0;
-
-    box-shadow:
-        0 10px 30px rgba(15, 23, 42, 0.06),
-        0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
-/* =========================================================
-   LEFT BRANDING SECTION
-========================================================= */
+/* ==========================================
+   BRANDING
+========================================== */
 
 .login-branding {
-    background: #0f172a;
-    color: #ffffff;
+    background: #ffffff;
 
-    position: relative;
+    border-right: 0.5px solid #D3D1C7;
 
     display: flex;
     align-items: center;
@@ -54,7 +56,7 @@
 }
 
 .branding-content {
-    max-width: 460px;
+    max-width: 500px;
 }
 
 .brand-badge {
@@ -63,243 +65,245 @@
 
     padding: 8px 14px;
 
-    border-radius: 999px;
+    border-radius: 9999px;
 
-    background: rgba(255, 255, 255, 0.08);
+    background: #E6F1FB;
 
-    color: #cbd5e1;
+    color: #185FA5;
 
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
 
-    margin-bottom: 28px;
-
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 24px;
 }
 
 .login-branding h1 {
-    font-size: 42px;
-    line-height: 1.15;
-    font-weight: 600;
+    font-size: 36px;
+    font-weight: 700;
 
-    margin-bottom: 20px;
+    line-height: 1.2;
 
-    letter-spacing: -1px;
+    color: #2C2C2A;
+
+    margin-bottom: 18px;
+
+    letter-spacing: -0.5px;
 }
 
 .login-branding p {
-    color: #94a3b8;
+    font-size: 15px;
+    line-height: 1.8;
 
-    font-size: 16px;
-    line-height: 1.7;
+    color: #5F5E5A;
 
     margin: 0;
 }
 
-/* =========================================================
+/* ==========================================
    BRANDING ACTIONS
-========================================================= */
+========================================== */
 
 .branding-actions {
-    margin-top: 42px;
+    margin-top: 36px;
 }
 
 .join-us-button {
     display: inline-flex;
-    align-items: center;
-
-    color: #ffffff;
 
     text-decoration: none;
 
-    font-size: 15px;
-    font-weight: 600;
+    color: #185FA5;
 
-    transition: opacity 0.2s ease;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .join-us-button:hover {
-    opacity: 0.85;
+    text-decoration: underline;
 }
 
 .branding-actions p {
-    margin-top: 12px;
+    margin-top: 10px;
 
-    color: #94a3b8;
+    color: #5F5E5A;
 
-    font-size: 14px;
+    font-size: 13px;
+
     line-height: 1.7;
 }
 
-/* =========================================================
-   RIGHT PANEL
-========================================================= */
+/* ==========================================
+   PANEL
+========================================== */
 
 .login-panel {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    padding: 48px;
-
-    background: #ffffff;
+    padding: 40px;
 }
 
 .login-card {
     width: 100%;
-    max-width: 380px;
+    max-width: 360px;
 }
 
-/* =========================================================
-   LOGIN HEADER
-========================================================= */
+/* ==========================================
+   HEADER
+========================================== */
 
 .login-header {
-    margin-bottom: 36px;
+    margin-bottom: 32px;
 }
 
 .login-header h2 {
-    font-size: 30px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: 700;
 
-    color: #0f172a;
+    color: #2C2C2A;
 
-    margin-bottom: 10px;
-
-    letter-spacing: -0.5px;
+    margin-bottom: 8px;
 }
 
 .login-header p {
-    color: #64748b;
-
-    font-size: 15px;
-
     margin: 0;
+
+    font-size: 14px;
+
+    color: #5F5E5A;
 }
 
-/* =========================================================
+/* ==========================================
    FORM
-========================================================= */
+========================================== */
 
 .login-form-content {
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 20px;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .form-group label {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
 
-    color: #334155;
+    color: #444441;
 }
 
-/* =========================================================
+/* ==========================================
    PASSWORD HEADER
-========================================================= */
+========================================== */
 
 .password-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-
-    gap: 12px;
 }
 
-/* =========================================================
+/* ==========================================
    INPUTS
-========================================================= */
+========================================== */
 
 .enterprise-input {
     width: 100%;
-    height: 52px;
+    height: 44px;
 
-    border: 1px solid #cbd5e1;
-    border-radius: 14px;
-
-    padding: 0 16px;
-
-    font-size: 15px;
-
-    color: #0f172a;
+    border: 1px solid #D3D1C7;
+    border-radius: 8px;
 
     background: #ffffff;
 
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        background-color 0.2s ease;
+    padding: 0 14px;
+
+    font-size: 14px;
+
+    color: #2C2C2A;
+
+    transition: all 0.2s ease;
 }
 
 .enterprise-input::placeholder {
-    color: #94a3b8;
+    color: #888780;
+}
+
+.enterprise-input:hover {
+    border-color: #B4B2A9;
 }
 
 .enterprise-input:focus {
     outline: none;
 
-    border-color: #2563eb;
+    border-color: #185FA5;
 
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+    box-shadow: 0 0 0 3px rgba(24, 95, 165, 0.2);
 }
 
-/* =========================================================
+/* ==========================================
    FORGOT PASSWORD
-========================================================= */
+========================================== */
 
 .forgot-password-link {
-    font-size: 13px;
-    font-weight: 500;
-
-    color: #2563eb;
-
     text-decoration: none;
 
-    transition: color 0.2s ease;
+    color: #185FA5;
 
-    cursor: pointer;
-
-    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .forgot-password-link:hover {
-    color: #1d4ed8;
     text-decoration: underline;
 }
 
-/* =========================================================
+/* ==========================================
+   ERROR
+========================================== */
+
+.error-message {
+    padding: 12px 14px;
+
+    border-radius: 8px;
+
+    background: #FCEBEB;
+
+    border: 1px solid rgba(163, 45, 45, 0.15);
+
+    color: #A32D2D;
+
+    font-size: 13px;
+}
+
+/* ==========================================
    LOGIN BUTTON
-========================================================= */
+========================================== */
 
 .login-button {
-    height: 52px;
+    height: 44px;
 
     border: none;
-    border-radius: 14px;
+    border-radius: 8px;
 
-    background: #2563eb;
-    color: #ffffff;
+    background: #185FA5;
 
-    font-size: 15px;
+    color: white;
+
+    font-size: 14px;
     font-weight: 600;
 
     cursor: pointer;
 
-    transition:
-        background 0.2s ease,
-        transform 0.1s ease;
-
-    margin-top: 8px;
+    transition: all 0.2s ease;
 }
 
 .login-button:hover:not(:disabled) {
-    background: #1d4ed8;
+    background: #0C447C;
 }
 
 .login-button:active:not(:disabled) {
@@ -307,73 +311,47 @@
 }
 
 .login-button:disabled {
-    background: #93c5fd;
+    background: #85B7EB;
     cursor: not-allowed;
 }
 
-/* =========================================================
-   ERROR MESSAGE
-========================================================= */
-
-.error-message {
-    padding: 14px 16px;
-
-    border-radius: 12px;
-
-    background: rgba(220, 38, 38, 0.08);
-
-    border: 1px solid rgba(220, 38, 38, 0.15);
-
-    color: #dc2626;
-
-    font-size: 14px;
-    font-weight: 500;
-}
-
-/* =========================================================
-   LOGIN FOOTER
-========================================================= */
+/* ==========================================
+   FOOTER
+========================================== */
 
 .login-footer {
-    margin-top: 28px;
-    padding-top: 22px;
+    margin-top: 24px;
 
-    border-top: 1px solid #e2e8f0;
+    padding-top: 20px;
+
+    border-top: 0.5px solid #D3D1C7;
 }
 
 .login-footer p {
     margin: 0;
 
-    font-size: 14px;
-    line-height: 1.7;
+    font-size: 13px;
 
-    color: #64748b;
+    color: #5F5E5A;
 }
 
-/* =========================================================
-   INLINE REGISTER LINK
-========================================================= */
-
 .footer-register-link {
-    color: #2563eb;
+    color: #185FA5;
 
     text-decoration: none;
 
     font-weight: 600;
 
-    margin-left: 6px;
-
-    transition: color 0.2s ease;
+    margin-left: 4px;
 }
 
 .footer-register-link:hover {
-    color: #1d4ed8;
     text-decoration: underline;
 }
 
-/* =========================================================
+/* ==========================================
    RESPONSIVE
-========================================================= */
+========================================== */
 
 @media (max-width: 992px) {
 
@@ -397,28 +375,16 @@
     }
 
     .login-panel {
-        padding: 24px;
+        padding: 20px;
     }
 
     .login-card {
         max-width: 100%;
     }
 
-    .login-header h2 {
-        font-size: 26px;
-    }
-
     .password-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 6px;
-    }
-
-    .login-footer p {
-        font-size: 13px;
-    }
-
-    .login-branding h1 {
-        font-size: 34px;
     }
 }

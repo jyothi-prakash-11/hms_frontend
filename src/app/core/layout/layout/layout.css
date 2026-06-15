@@ -1,0 +1,100 @@
+/* ==========================================
+   MAIN STRUCTURAL LAYOUT WRAPPER
+========================================== */
+.layout-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Locks framework size strictly to viewport limits */
+    overflow: hidden; /* Prohibits the root window from displaying broken scrollbars */
+    background-color: #F1EFE8; /* Soft warm canvas layout background */
+}
+
+/* ==========================================
+   GLOBAL NAVBAR STICKY CROSSBAR HEADER
+========================================== */
+.global-header {
+    width: 100%;
+    height: 70px; /* Locked explicit layout height dimension boundary */
+    background-color: #FFFFFF;
+    border-bottom: 0.5px solid #D3D1C7;
+    flex-shrink: 0; /* Prevents layout compression when content loads */
+    z-index: 1000;
+
+    /* Internal Flex layout alignments */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    box-sizing: border-box;
+}
+
+/* Forces your interactive profile section component to stick right */
+.global-header app-header-profile,
+.global-header app-profile,
+.global-header .profile-section {
+    margin-left: auto !important;
+}
+
+/* ==========================================
+   UNIFIED HORIZONTAL SIDEBAR + CONTENT HOUSING
+========================================== */
+.main-body-container {
+    display: flex;
+    flex: 1; /* Automatically consumes all remaining viewport height space below header */
+    height: calc(100vh - 70px);
+    overflow: hidden; /* Blocks outer double scrolling layers */
+    width: 100%;
+}
+
+/* ==========================================
+   LOCKED LEFT SIDEBAR PANEL 
+========================================== */
+.fixed-sidebar {
+    width: 260px;
+    height: 100%;
+    background-color: #FFFFFF;
+    border-right: 0.5px solid #D3D1C7;
+    flex-shrink: 0; /* Stabilizes width block dimensions */
+    overflow-y: auto; /* Adds dedicated tracking scroll mechanics if nav links exceed height */
+}
+
+/* ==========================================
+   DYNAMIC MAIN CONTENT SCROLL AREA 
+========================================== */
+.content {
+    flex: 1; /* Claims all remaining layout width across screen rows */
+    height: 100%;
+    padding: 32px;
+    overflow-y: auto; /* CRITICAL LINE: Restricts scroll bar activation solely inside this box */
+    box-sizing: border-box;
+}
+
+/* Box container boundaries */
+.content > * {
+    display: block;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ==========================================
+   MOBILE & TABLET RESPONSIVE CONTEXT REBUILD
+========================================== */
+@media (max-width: 992px) {
+    .main-body-container {
+        height: auto;
+    }
+
+    .fixed-sidebar {
+        display: none; /* Collapses sidebar for typical mobile drawer architectures */
+    }
+
+    .global-header {
+        padding: 0 20px;
+    }
+
+    .content {
+        padding: 20px;
+        overflow-y: visible; /* Permits standard native window scrolling engine on mobile screens */
+        height: auto;
+    }
+}

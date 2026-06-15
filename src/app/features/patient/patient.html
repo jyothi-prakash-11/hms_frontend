@@ -1,0 +1,280 @@
+<div class="page">
+
+    <div class="page-header">
+        <div>
+            <h1>Patients</h1>
+            <p>Manage patient records and clinical registrations</p>
+        </div>
+        @if (canAddPatient()) {
+        <button class="primary-btn" type="button" (click)="openAddPatient()">Add Patient</button>
+        }
+    </div>
+
+    @if (successMessage()) {
+    <div class="success-message">{{ successMessage() }}</div>
+    }
+
+    <div class="search-utilities-bar">
+        <div class="search-input-wrapper">
+            <span class="search-magnifier-icon">🔍</span>
+            <input type="text" placeholder="Search patient records by name, email, or telephone..."
+                [ngModel]="searchText()" (ngModelChange)="searchText.set($event)" class="global-search-input" />
+            @if (searchText()) {
+            <button type="button" class="secondary-btn" (click)="searchText.set('')">Clear</button>
+            }
+        </div>
+    </div>
+
+    <div class="content-card">
+
+        <div class="section-header">
+            <h3>Patient Directory</h3>
+        </div>
+
+        @if (filteredPatients().length === 0) {
+        <div class="empty-state">
+            <h3>No Patient Records Found</h3>
+            <p>Use the button above to add your first patient or refine your search.</p>
+        </div>
+        } @else {
+
+        <div class="patients-header">
+            <div>Name</div>
+            <div>Email</div>
+            <div>Phone</div>
+            <div>Actions</div>
+        </div>
+
+        @for (patient of filteredPatients(); track patient.userId.email) {
+        <div class="patient-card">
+
+            <div class="patient-summary" role="button" tabindex="0" (click)="togglePatient(patient.userId.email)"
+                (keydown.enter)="togglePatient(patient.userId.email)"
+                (keydown.space)="togglePatient(patient.userId.email)">
+                <div class="patient-col patient-name">
+                    {{ patient.userId.firstName }} {{ patient.userId.lastName }}
+                </div>
+                <div class="patient-col">{{ patient.userId.email }}</div>
+                <div class="patient-col">{{ patient.userId.phone }}</div>
+                <div class="patient-actions" role="button" tabindex="0" (click)="$event.stopPropagation()"
+                    (keydown.enter)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()">
+                    @if (canEditPatient()) {
+                    <button class="secondary-btn" type="button">Edit</button>
+                    }
+                </div>
+            </div>
+
+            @if (expandedPatientEmail() === patient.userId.email) {
+            <div class="patient-details">
+                @if (selectedPatient()) {
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <label>UHID</label>
+                        <span>{{ selectedPatient()?.UHID }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Blood Group</label>
+                        <span>{{ selectedPatient()?.bloodGroup }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Date of Birth</label>
+                        <span>{{ selectedPatient()?.dob }}</span>
+                    </div>
+                    <div class="detail-item full-width">
+                        <label>Address</label>
+                        <span>{{ selectedPatient()?.address }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Emergency Contact</label>
+                        <span>{{ selectedPatient()?.emergencyContactName }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Emergency Phone</label>
+                        <span>{{ selectedPatient()?.emergencyContactPhone }}</span>
+                    </div>
+                </div>
+                } @else {
+                <div class="empty-state">
+                    <h3>Loading patient details…</h3>
+                    <p>Please wait while we fetch the patient metadata.</p>
+                </div>
+                }
+            </div>
+            }
+
+        </div>
+        }
+        }
+    </div>
+</div>
+
+@if (showEmailCheckingForm() || showPatientForm()) {
+<div class="modal-backdrop" role="button" tabindex="0" (click)="closeModal()" (keydown.enter)="closeModal()"
+    (keydown.space)="closeModal()">
+    <div class="modal" role="dialog" tabindex="-1" (click)="$event.stopPropagation()"
+        (keydown)="$event.stopPropagation()">
+
+        <button type="button" class="modal-close-btn" (click)="closeModal()">&times;</button>
+
+        @if (showEmailCheckingForm()) {
+        <div class="modal-header">
+            <h3>Verify Patient Record</h3>
+            <p>Enter email parameters to check for existing system registrations before proceeding.</p>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="patientEmailCheck">Email Communications Line</label>
+                    <input id="patientEmailCheck" type="email" [formControl]="emailControl"
+                        placeholder="patient.name@example.com" />
+                    @if (emailControl.touched && emailControl.errors?.['email']) {
+                    <small class="error-text">Please provide a valid structured email address.</small>
+                    }
+                </div>
+
+                @if (statusMessage()) {
+                <div class="info-message">
+                    {{ statusMessage() }}
+                </div>
+                }
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-section" style="display:flex; justify-content:flex-end; gap:12px;">
+                <button type="button" class="secondary-btn" (click)="closeModal()">Cancel</button>
+                <button type="button" class="primary-btn" (click)="checkPatient()"
+                    [disabled]="emailControl.invalid || isCheckingPatient()">
+                    {{ isCheckingPatient() ? 'Verifying Parameters...' : 'Proceed Verification' }}
+                </button>
+            </div>
+        </div>
+        }
+
+        @if (showPatientForm()) {
+        <div class="modal-header">
+            <h3>New Patient Clinical Registration</h3>
+            <p>Populate core data attributes to instantiate this localized hospital medical matrix profile.</p>
+        </div>
+
+        <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="patient-form modal-body--scrollable">
+
+            <div class="form-section">
+                <h3>Core Identity Demographics</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="patientFirstName">First Legal Name</label>
+                        <input id="patientFirstName" type="text" formControlName="firstName" />
+                        @if (patientForm.controls.firstName.touched && patientForm.controls.firstName.invalid) {
+                        <small class="error-text">Given name attribute string is required.</small>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label for="patientLastName">Last Family Name</label>
+                        <input id="patientLastName" type="text" formControlName="lastName" />
+                        @if (patientForm.controls.lastName.touched && patientForm.controls.lastName.invalid) {
+                        <small class="error-text">Surname data reference cannot be vacant.</small>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label for="patientEmail">System Record Email</label>
+                        <input id="patientEmail" type="email" formControlName="email" readonly />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="patientPhone">Phone Contact Line</label>
+                        <input id="patientPhone" type="text" formControlName="phone" placeholder="0000000000" />
+                        @if (patientForm.controls.phone.touched && patientForm.controls.phone.invalid) {
+                        <small class="error-text">
+                            {{ patientForm.controls.phone.errors?.['required'] ? 'Active phone parameters are required.'
+                            :
+                            'Must match exact 10-digit number structure.' }}
+                        </small>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label for="patientGender">Biological Gender</label>
+                        <select id="patientGender" formControlName="gender">
+                            <option value="">Select Gender Reference</option>
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                            <option value="OTHER">Other / Non-Disclosed</option>
+                        </select>
+                        @if (patientForm.controls.gender.touched && patientForm.controls.gender.invalid) {
+                        <small class="error-text">Please classify gender profile tracking choice.</small>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" formControlName="dob" />
+                        @if (patientForm.controls.dob.touched && patientForm.controls.dob.invalid) {
+                        <small class="error-text">Chronological birth date boundary is mandatory.</small>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Clinical Vitals Metadata</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Blood Group Antigen Type</label>
+                        <input type="text" placeholder="e.g. O+, AB-" formControlName="bloodGroup" />
+                        @if (patientForm.controls.bloodGroup.touched && patientForm.controls.bloodGroup.invalid) {
+                        <small class="error-text">Specify blood archetype classification.</small>
+                        }
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Permanent Mailing Address</label>
+                        <textarea formControlName="address" rows="3"
+                            placeholder="Full residential layout details..."></textarea>
+                        @if (patientForm.controls.address.touched && patientForm.controls.address.invalid) {
+                        <small class="error-text">Physical tracking address reference must be provided.</small>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Emergency Association Contacts</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Next of Kin Contact Name</label>
+                        <input type="text" formControlName="emergencyContactName" />
+                        @if (patientForm.controls.emergencyContactName.touched &&
+                        patientForm.controls.emergencyContactName.invalid) {
+                        <small class="error-text">Emergency contact name declaration required.</small>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>Emergency Line Telephone</label>
+                        <input type="text" formControlName="emergencyContactPhone" placeholder="0000000000" />
+                        @if (patientForm.controls.emergencyContactPhone.touched &&
+                        patientForm.controls.emergencyContactPhone.invalid) {
+                        <small class="error-text">
+                            {{ patientForm.controls.emergencyContactPhone.errors?.['required'] ? 'Emergency network link
+                            line is required.' : 'Must extend precisely to a 10-digit sequence.' }}
+                        </small>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section" style="display:flex; justify-content:flex-end; gap:12px;">
+                <button type="button" class="secondary-btn" (click)="closeModal()">Cancel</button>
+                <button type="submit" class="primary-btn" [disabled]="patientForm.invalid || isCreatingPatient()">
+                    {{ isCreatingPatient() ? 'Committing Registration Operations...' : 'Commit Patient Record' }}
+                </button>
+            </div>
+        </form>
+        }
+    </div>
+</div>
+}

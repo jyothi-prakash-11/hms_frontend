@@ -1,0 +1,194 @@
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Appointments</h1>
+            <p>Manage and monitor patient appointments</p>
+        </div>
+
+        @if (canAddAppointments()) {
+        <button class="primary-btn" type="button" (click)="openAppointment()">
+            Add Appointment
+        </button>
+        }
+    </div>
+
+    @if (showAddAppointment()) {
+    <div class="modal-backdrop">
+        <div class="modal">
+            <button class="modal-close-btn" type="button" (click)="closeAppointment()">
+                &times;
+            </button>
+            <div class="modal-header">
+                <div>
+                    <h2>Add Appointment</h2>
+                    <p>Schedule a new patient appointment</p>
+                </div>
+            </div>
+            <div class="modal-body modal-body--scrollable">
+                <app-add-appointment-form (appointmentCreated)="onAppointmentCreated($event)"></app-add-appointment-form>
+            </div>
+        </div>
+    </div>
+    }
+
+    @if (appointments().length === 0) {
+    <div class="empty-state">
+        <h3>No Appointments Found</h3>
+        <p>Create your first appointment.</p>
+    </div>
+    } @else {
+    <div class="content-card">
+        <div class="section-header">
+            <h3>Appointment Directory</h3>
+        </div>
+
+        <div class="appointments-header">
+            <div>Appointment ID</div>
+            <div>Schedule</div>
+            <div>Doctor</div>
+            <div>Department</div>
+            <div>Patient</div>
+            <div>Status</div>
+        </div>
+
+        @for (appointment of appointments(); track appointment._id) {
+        <div class="appointment-row">
+
+            <div class="appointment-summary" (click)="toggleAppointment(appointment._id)">
+
+                <div class="appointment-col appointment-id">
+                    {{ appointment.appointmentId }}
+                </div>
+
+                <div class="appointment-col appointment-schedule">
+                    <div class="schedule-date">
+                        {{ appointment.appointmentDate | date:'dd MMM yyyy' }}
+                    </div>
+                    <div class="schedule-time">
+                        {{ appointment.appointmentTime }}
+                    </div>
+                </div>
+
+                <div class="appointment-col">
+                    Dr. {{ appointment.doctorId.employeeId.userId.firstName }}
+                    {{ appointment.doctorId.employeeId.userId.lastName }}
+                </div>
+
+                <div class="appointment-col">
+                    {{ appointment.doctorId.employeeId.designation }}
+                </div>
+
+                <div class="appointment-col">
+                    <div class="patient-name">
+                        {{ appointment.patientId.userId.firstName }}
+                        {{ appointment.patientId.userId.lastName }}
+                    </div>
+                    <div class="patient-email">
+                        {{ appointment.patientId.userId.email }}
+                    </div>
+                </div>
+
+                <div class="appointment-col" (click)="$event.stopPropagation()">
+                    @if (appointment.status === 'SCHEDULED') {
+                    <select class="status-select" [value]="appointment.status" [disabled]="!canUpdateAppointment() || isUpdating()"
+                        (change)="updateAppointmentStatus(appointment._id, $any($event.target).value)">
+                        <option value="SCHEDULED">Scheduled</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="CANCELLED">Cancelled</option>
+                    </select>
+                    } @else {
+                    <span class="status-badge" [class]="appointment.status.toLowerCase()">
+                        {{ appointment.status }}
+                    </span>
+                    }
+                </div>
+            </div>
+
+            @if (expandedAppointmentId() === appointment._id) {
+            <div class="appointment-details">
+
+                <div class="details-section">
+                    <h4>Appointment Information</h4>
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <label>Appointment ID</label>
+                            <span>{{ appointment.appointmentId }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Appointment Date</label>
+                            <span>{{ appointment.appointmentDate | date:'dd MMM yyyy' }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Appointment Time</label>
+                            <span>{{ appointment.appointmentTime }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Status</label>
+                            <span>{{ appointment.status }}</span>
+                        </div>
+                        @if (appointment.createdBy) {
+                        <div class="detail-item">
+                            <label>Created By</label>
+                            <span>
+                                {{ appointment.createdBy.firstName }}
+                                {{ appointment.createdBy.lastName }}
+                            </span>
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h4>Patient Information</h4>
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <label>Name</label>
+                            <span>
+                                {{ appointment.patientId.userId.firstName }}
+                                {{ appointment.patientId.userId.lastName }}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <label>UHID</label>
+                            <span>{{ appointment.patientId.UHID }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Email</label>
+                            <span>{{ appointment.patientId.userId.email }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Phone</label>
+                            <span>{{ appointment.patientId.userId.phone }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-section">
+                    <h4>Doctor Information</h4>
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <label>Doctor</label>
+                            <span>
+                                Dr. {{ appointment.doctorId.employeeId.userId.firstName }}
+                                {{ appointment.doctorId.employeeId.userId.lastName }}
+                            </span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Department</label>
+                            <span>{{ appointment.doctorId.employeeId.designation }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <label>Specialization</label>
+                            <span>{{ appointment.doctorId.specialization }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            }
+
+        </div>
+        }
+    </div>
+    }
+</div>

@@ -2,28 +2,25 @@
 
     <div class="login-container">
 
-        <!-- Left Branding Section -->
         <div class="login-branding">
+
             <div class="branding-content">
 
                 <div class="brand-badge">
                     HMS Portal
                 </div>
 
-                <h1>
-                    Hospital Management System
-                </h1>
+                <h1>Hospital Management System</h1>
 
                 <p>
                     Secure internal operations portal for hospital administration,
-                    doctors, receptionists, and staff management.
+                    doctors, receptionists and staff management.
                 </p>
 
-                <!-- NEW ACTIONS -->
                 <div class="branding-actions">
 
-                    <a routerLink="auth/register" class="join-us-button">
-                        Join Our Team
+                    <a routerLink="/auth/register" class="join-us-button">
+                        Request Access
                     </a>
 
                     <p>
@@ -33,19 +30,24 @@
                 </div>
 
             </div>
+
         </div>
 
-        <!-- Right Form Section -->
         <div class="login-panel">
 
             <div class="login-card">
 
                 <div class="login-header">
+
                     <h2>Welcome Back</h2>
-                    <p>Login to continue to the internal portal</p>
+
+                    <p>
+                        Login to continue to the internal portal
+                    </p>
+
                 </div>
 
-                <form (submit)="onLogin()" [formGroup]="loginForm" class="login-form-content">
+                <form [formGroup]="loginForm" (submit)="onLogin()" class="login-form-content">
 
                     <div class="form-group">
 
@@ -53,8 +55,8 @@
                             Email Address
                         </label>
 
-                        <input id="email" type="email" name="email" placeholder="Enter your email"
-                            formControlName="email" class="enterprise-input">
+                        <input id="email" type="email" formControlName="email" placeholder="Enter your email"
+                            class="enterprise-input">
 
                     </div>
 
@@ -72,33 +74,35 @@
 
                         </div>
 
-                        <input id="password" type="password" placeholder="Enter your password"
-                            formControlName="password" class="enterprise-input">
+                        <input id="password" type="password" formControlName="password"
+                            placeholder="Enter your password" class="enterprise-input">
 
                     </div>
 
-                    @if(errorMessage) {
-
-                    <div class="error-message">
+                    <div *ngIf="errorMessage" class="error-message">
                         {{ errorMessage }}
                     </div>
 
-                    }
+                    <button type="submit" [disabled]="loginForm.invalid" class="login-button">
 
-                    <button [disabled]="loginForm.invalid" type="submit" class="login-button">
                         Login
+
                     </button>
 
                 </form>
-                <!-- FOOTER -->
+
                 <div class="login-footer">
 
                     <p>
+
                         Need access to the hospital portal?
 
                         <a routerLink="/auth/register" class="footer-register-link">
+
                             Request access
+
                         </a>
+
                     </p>
 
                 </div>

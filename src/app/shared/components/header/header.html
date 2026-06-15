@@ -1,0 +1,67 @@
+<div class="profile-section">
+    <button type="button" class="profile-button" (click)="toggleProfile()">
+        <span class="user-badge-role">
+            {{ profile()?.profile?.designation || 'Staff' }}
+        </span>
+
+        <div class="profile-meta-block">
+            <span class="user-display-name">
+                {{ profile()?.user?.firstName }} {{ profile()?.user?.lastName }}
+            </span>
+            <span class="user-display-email">
+                {{ profile()?.user?.email }}
+            </span>
+        </div>
+
+        <div class="profile-avatar-icon">
+            <span class="avatar-initials">
+                {{ profile()?.user?.firstName?.charAt(0) }}{{ profile()?.user?.lastName?.charAt(0) }}
+            </span>
+        </div>
+    </button>
+
+    @if (showProfile()) {
+    <div class="profile-card animate-fade-in">
+        <div class="profile-header">
+            <h3>
+                {{ profile()?.user?.firstName }} {{ profile()?.user?.lastName }}
+            </h3>
+            <span class="role-badge">
+                {{ profile()?.profile?.designation }}
+            </span>
+        </div>
+
+        <div class="profile-grid">
+            <div class="grid-info-cell full-width">
+                <label>Email Address</label>
+                <p>{{ profile()?.user?.email || '—' }}</p>
+            </div>
+
+            <div class="grid-info-cell full-width">
+                <label>Phone Number</label>
+                <p>{{ profile()?.user?.phone || '—' }}</p>
+            </div>
+
+            <div class="grid-info-cell">
+                <label>Employee Code</label>
+                <p class="code-highlight">{{ profile()?.profile?.employeeCode || '—' }}</p>
+            </div>
+
+            <div class="grid-info-cell">
+                <label>Department Unit</label>
+                <p>{{ profile()?.profile?.department || '—' }}</p>
+            </div>
+
+            <div class="grid-info-cell">
+                <label>Designation</label>
+                <p>{{ profile()?.profile?.designation || '—' }}</p>
+            </div>
+
+            <div class="grid-info-cell">
+                <label>Joining Date</label>
+                <p>{{ profile()?.profile?.joiningDate | date:'dd MMM yyyy' }}</p>
+            </div>
+        </div>
+    </div>
+    }
+</div>

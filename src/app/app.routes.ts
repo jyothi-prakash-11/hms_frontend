@@ -3,6 +3,7 @@ import { AUTH_ROUTES } from './features/auth/auth.routes';
 import { ADMIN_ROUTES } from './features/admin/admin.routes';
 import { AuthGuard } from './core/guards/auth.guard';
 import { NotFound } from './core/error/not-found/not-found';
+import { Layout } from './core/layout/layout/layout';
 
 export const routes: Routes = [
     {
@@ -10,12 +11,19 @@ export const routes: Routes = [
         children: AUTH_ROUTES
     },
     {
-        path: 'admin',
-        children: ADMIN_ROUTES,
-        canActivate: [AuthGuard]
+        path: '',
+        component: Layout,
+        canActivate: [AuthGuard],
+        children: [
+            {
+                path: 'admin',
+                children: ADMIN_ROUTES
+            }
+
+        ]
     },
     {
-        path:'**',
-        component:NotFound
+        path: '**',
+        component: NotFound
     }
 ];

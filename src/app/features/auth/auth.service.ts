@@ -109,7 +109,15 @@ export class AuthService {
         }
 
     }
-    getRoles() {
-        return this.http.get<ApiResponse<RolesResponse[]>>('http://localhost:3000/api/meta/roles');
+    getCurrentModuleByRole() {
+        const roleCode = localStorage.getItem('role') as ROLE;
+        const route = ROLE_ROUTE_MAP[roleCode];
+        console.log("Role:", roleCode);
+        console.log("Route:", route);
+        return route
+    }
+    hasAccess(allowedRoles: ROLE[]): boolean {
+        const roleCode = localStorage.getItem('role') as ROLE;
+        return allowedRoles.includes(roleCode);
     }
 }

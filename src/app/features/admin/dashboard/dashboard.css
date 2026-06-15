@@ -1,0 +1,109 @@
+/* ==========================================
+   PAGE CONTAINER SUB-HEADER LAYOUT
+========================================== */
+.page-container {
+  width: 100%;
+}
+
+.page-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.page-title-section h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1a202c; /* Deep neutral color mapping */
+}
+
+.page-subtitle {
+  margin: 4px 0 0 0;
+  font-size: 0.9rem;
+  color: #718096; /* Slate hint accent text styling */
+}
+
+/* ==========================================
+   METRIC DATA DASHBOARD GRID MAP
+========================================== */
+.stats-grid-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Standardized Rounded Container Card Block */
+.metric-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.metric-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Card Section Labels */
+.metric-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #a0aec0;
+  letter-spacing: 0.05em;
+}
+
+/* Heavy Metric Large Figure Indicators */
+.metric-value-display {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #1a202c;
+  margin: 4px 0;
+}
+
+.metric-helper-text {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+/* ==========================================
+   PENDING COMPONENT MODIFIER STYLING
+========================================== */
+/* Soft red layout container treatment if items require administrative verification */
+.metric-card.alert-state-card.has-pending {
+  background-color: #fffaf0; /* Warm highlight alert background */
+  border-color: #feebc8;
+}
+
+.metric-card.alert-state-card.has-pending .metric-label {
+  color: #dd6b20; /* Deep orange alert emphasis label */
+}
+
+.metric-card.alert-state-card.has-pending .metric-value-display {
+  color: #dd6b20;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN ADAPTATION QUERIES
+========================================== */
+@media (max-width: 1200px) {
+  .stats-grid-row {
+    grid-template-columns: repeat(2, 1fr); /* 2x2 grid tracking configuration on smaller viewports */
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .stats-grid-row {
+    grid-template-columns: 1fr; /* Single column layout block configuration for mobile viewports */
+  }
+}
