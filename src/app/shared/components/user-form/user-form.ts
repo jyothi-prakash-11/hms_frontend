@@ -4,9 +4,10 @@ import { RolesResponse } from '../../../features/auth/auth.model';
 
 @Component({
   selector: 'app-user-form',
+  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './user-form.html',
-  styleUrl: './user-form.css',
+  styleUrls: ['./user-form.css'],
 })
 export class UserForm {
   form = input.required<FormGroup>();

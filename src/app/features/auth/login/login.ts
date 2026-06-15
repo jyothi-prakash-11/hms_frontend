@@ -1,15 +1,15 @@
 import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginRequest } from '../auth.model';
 import { AuthService } from '../auth.service';
 import { Router, RouterLink } from '@angular/router';
 import ToastService from '../../../shared/components/toast/toast.service';
-import { ToastComponent } from "../../../shared/components/toast/toast";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, RouterLink, ToastComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
 })

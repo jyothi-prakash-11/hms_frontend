@@ -1,1 +1,167 @@
-<p>doctor-form works!</p>
+@if (form()) {
+
+<div [formGroup]="form()" class="form-card">
+
+    <div class="form-section">
+
+        <h3>
+            Doctor Details
+        </h3>
+
+        <div class="form-grid">
+
+            <!-- SPECIALIZATION -->
+
+            <div class="form-group">
+
+                <label for="specialization">
+                    Specialization
+                </label>
+
+                <input id="specialization" type="text" formControlName="specialization"
+                    placeholder="Enter specialization">
+
+                @if(
+                form().get('specialization')?.touched &&
+                form().get('specialization')?.invalid){
+
+                <small class="error-text">
+
+                    Specialization is required
+
+                </small>
+
+                }
+
+            </div>
+
+            <!-- QUALIFICATION -->
+
+            <div class="form-group">
+
+                <label for="qualification">
+                    Qualification
+                </label>
+
+                <input id="qualification" type="text" formControlName="qualification" placeholder="Enter qualification">
+
+                @if(
+                form().get('qualification')?.touched &&
+                form().get('qualification')?.invalid){
+
+                <small class="error-text">
+
+                    Qualification is required
+
+                </small>
+
+                }
+
+            </div>
+
+            <!-- CONSULTATION FEE -->
+
+            <div class="form-group">
+
+                <label for="consultationFee">
+                    Consultation Fee
+                </label>
+
+                <input id="consultationFee" type="number" formControlName="consultationFee"
+                    placeholder="Enter consultation fee">
+
+                @if(
+                form().get('consultationFee')?.touched &&
+                form().get('consultationFee')?.invalid){
+
+                <small class="error-text">
+
+                    Consultation fee must be zero or greater
+
+                </small>
+
+                }
+
+            </div>
+
+            <!-- REGISTRATION NUMBER -->
+
+            <div class="form-group">
+
+                <label for="medicalRegistrationNo">
+                    Medical Registration Number
+                </label>
+
+                <input id="medicalRegistrationNo" type="text" formControlName="medicalRegistrationNo"
+                    placeholder="Enter registration number">
+
+                @if(
+                form().get('medicalRegistrationNo')?.touched &&
+                form().get('medicalRegistrationNo')?.invalid){
+
+                <small class="error-text">
+
+                    Registration number is required
+
+                </small>
+
+                }
+
+            </div>
+
+            <!-- EXPERIENCE -->
+
+            <div class="form-group">
+
+                <label for="experienceYears">
+                    Experience (Years)
+                </label>
+
+                <input id="experienceYears" type="number" formControlName="experienceYears"
+                    placeholder="Enter years of experience">
+
+                @if(
+                form().get('experienceYears')?.touched &&
+                form().get('experienceYears')?.invalid){
+
+                <small class="error-text">
+
+                    Experience is required and cannot be negative
+
+                </small>
+
+                }
+
+            </div>
+
+            <!-- AVAILABLE FROM -->
+
+            <div class="form-group">
+
+                <label for="availabilityStartTime">
+                    Available From
+                </label>
+
+                <input id="availabilityStartTime" type="time" formControlName="availabilityStartTime">
+
+            </div>
+
+            <!-- AVAILABLE UNTIL -->
+
+            <div class="form-group">
+
+                <label for="availabilityEndTime">
+                    Available Until
+                </label>
+
+                <input id="availabilityEndTime" type="time" formControlName="availabilityEndTime">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+}

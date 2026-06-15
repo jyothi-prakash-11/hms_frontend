@@ -1,12 +1,17 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CreateDoctorRequest, DoctorResponse } from './doctor.model';
 import { DoctorService } from './doctor.service';
 import { finalize } from 'rxjs';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UserForm } from '../../shared/components/user-form/user-form';
+import { EmployeeForm } from '../../shared/components/employee-form/employee-form';
+import { DoctorForm } from '../../shared/components/doctor-form/doctor-form';
+import ToastService from '../../shared/components/toast/toast.service';
+import { RolesResponse } from '../auth/auth.model';
 
 @Component({
   selector: 'app-doctor',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, UserForm, EmployeeForm, DoctorForm],
   templateUrl: './doctor.html',
   styleUrls: ['./doctor.css'],
 })
@@ -29,122 +34,32 @@ export class Doctor implements OnInit {
       Validators.email
     ]
   );
-  // doctor form
-  doctorForm =
-    new FormGroup({
-
-      firstName:
-        new FormControl(
-          '',
-          [
-            Validators.required
-          ]
-        ),
-
-      lastName:
-        new FormControl(
-          '',
-          [
-            Validators.required
-          ]
-        ),
-
-      email:
-        new FormControl(
-          '',
-          [
-            Validators.required,
-            Validators.email
-          ]
-        ),
-
-      phone:
-        new FormControl(
-          '',
-          [
-            Validators.required,
-            Validators.pattern(
-              '^[0-9]{10}$'
-            )
-          ]
-        ),
-      department:
-        new FormControl(
-          '',
-          [
-            Validators.required
-          ]
-        ),
-
-      designation:
-        new FormControl(
-          '',
-          [
-            Validators.required
-          ]
-        ),
-
-      joiningDate:
-        new FormControl(
-          '',
-          [
-            Validators.required
-          ]
-        ),
-      specialization:
-        new FormControl(
-          '',
-          [
-            Validators.required
-          ]
-        ),
-
-      qualification:
-        new FormControl(
-          '',
-          [
-            Validators.required
-          ]
-        ),
-
-      consultationFee:
-        new FormControl<Number>(
-          0,
-          [
-            Validators.required,
-            Validators.min(0)
-          ]
-        ),
-
-      medicalRegistrationNo:
-        new FormControl(
-          '',
-          [
-            Validators.required
-          ]
-        ),
-
-      experienceYears:
-        new FormControl<Number>(
-          0,
-          [
-            Validators.required,
-            Validators.min(0)
-          ]
-        ),
-
-      availabilityStartTime:
-        new FormControl(
-          ''
-        ),
-
-      availabilityEndTime:
-        new FormControl(
-          ''
-        )
-
-    });
-  constructor(private doctorService: DoctorService) { }
+  doctorRoles = signal<RolesResponse[]>([{ name: 'Doctor' }]);
+  private fb = inject(NonNullableFormBuilder);
+  doctorForm = this.fb.group({
+    userInfo: this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      roleName: ['Doctor', Validators.required]
+    }),
+    employeeInfo: this.fb.group({
+      department: ['' as 'OPD' | 'IPD' | 'LAB' | 'PHARMACY' | 'ADMIN', Validators.required],
+      designation: ['', Validators.required],
+      joiningDate: ['', Validators.required]
+    }),
+    doctorInfo: this.fb.group({
+      specialization: ['', Validators.required],
+      qualification: ['', Validators.required],
+      consultationFee: [0, [Validators.required, Validators.min(0)]],
+      medicalRegistrationNo: ['', Validators.required],
+      experienceYears: [0, [Validators.required, Validators.min(0)]],
+      availabilityStartTime: [''],
+      availabilityEndTime: ['']
+    })
+  });
+  constructor(private doctorService: DoctorService, private toastService: ToastService) { }
   ngOnInit(): void {
     this.loadDoctors();
   }
@@ -189,12 +104,10 @@ export class Doctor implements OnInit {
           if (res.data.exist) {
             this.doctorStatusMessage.set('Account already exists with email');
           } else {
-            console.log('opening modal');
-            this.doctorForm.patchValue({ email: email });
-            this.doctorForm.controls.email.disable();
+            this.doctorForm.patchValue({ userInfo: { email: email ?? '' } });
+            this.doctorForm.controls.userInfo.controls.email.disable();
             this.showDoctorEmailForm.set(false);
             this.showDoctorModal.set(true);
-            console.log(this.showDoctorModal());
           }
         },
         error: () => {
@@ -205,41 +118,53 @@ export class Doctor implements OnInit {
   closeDoctorModal() {
     this.showDoctorModal.set(false);
     this.showDoctorEmailForm.set(false);
-    this.doctorForm.reset();
+    this.doctorForm.controls.userInfo.controls.email.enable();
+    this.doctorForm.reset({
+      userInfo: {
+        roleName: 'Doctor'
+      },
+      employeeInfo: {},
+      doctorInfo: {}
+    });
+    this.emailControl.reset();
   }
   createDoctor() {
     if (this.doctorForm.invalid) {
       this.doctorForm.markAllAsTouched();
+      this.toastService.error('Please fill in all required fields correctly.');
       return;
     }
-    console.log("Doctor Creation Form Values : ", this.doctorForm.getRawValue());
-    const payload = this.doctorForm.getRawValue() as CreateDoctorRequest;
+    const rawValue = this.doctorForm.getRawValue();
+    const { roleName, ...userInfo } = rawValue.userInfo;
+    const payload: CreateDoctorRequest = {
+      ...userInfo,
+      ...rawValue.employeeInfo,
+      ...rawValue.doctorInfo
+    };
     this.isCreatingDoctor.set(true);
     this.doctorService.createDoctor(payload)
-    .pipe(
-      finalize(()=>{
-        this.isCreatingDoctor.set(false);
-        setTimeout(()=>{
-          this.doctorStatusMessage.set('');
-        },5000);
-      })
-    )
-    .subscribe({
-      next: (res) => {
-        console.log(res);
-        this.doctors.update(
-          doctors => [
-            res.data,
-            ...doctors
-          ]
-        );
-        this.doctorStatusMessage.set('Doctor has been created sucessfully');
-        this.doctorForm.reset();
-        this.closeDoctorModal();
-      },
-      error:(error)=>{
-        this.doctorStatusMessage.set(error.error?.message ??  'Something went wrong');
-      }
-    });
+      .pipe(
+        finalize(() => {
+          this.isCreatingDoctor.set(false);
+          setTimeout(() => {
+            this.doctorStatusMessage.set('');
+          }, 5000);
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          this.doctors.update(
+            doctors => [
+              res.data,
+              ...doctors
+            ]
+          );
+          this.toastService.success('Doctor has been created successfully');
+          this.closeDoctorModal();
+        },
+        error: (error) => {
+          this.toastService.error(error.error?.message ?? 'Something went wrong');
+        }
+      });
   }
 }

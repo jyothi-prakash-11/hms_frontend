@@ -1,0 +1,134 @@
+/* ==========================================
+   FORM CARD
+========================================== */
+
+.form-card {
+    background: #FFFFFF;
+    width: 100%;
+}
+
+.form-section {
+    border: 0.5px solid #D3D1C7;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.form-section h3 {
+    margin: 0 0 24px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2C2C2A;
+}
+
+/* ==========================================
+   FORM GRID
+========================================== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+/* ==========================================
+   FORM GROUP
+========================================== */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #5F5E5A;
+}
+
+/* ==========================================
+   INPUTS
+========================================== */
+
+input,
+select,
+textarea {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+
+    border: 1px solid #D3D1C7;
+    border-radius: 8px;
+
+    background: #FFFFFF;
+
+    font-size: 14px;
+    color: #2C2C2A;
+
+    transition: border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #9A9994;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #185FA5;
+    box-shadow: 0 0 0 3px rgba(24, 95, 165, 0.15);
+}
+
+input[type="time"],
+input[type="date"] {
+    cursor: pointer;
+}
+
+/* ==========================================
+   INVALID INPUT
+========================================== */
+
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+    border-color: #B3261E;
+}
+
+/* ==========================================
+   ERROR MESSAGE
+========================================== */
+
+.error-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #B3261E;
+    margin-top: 2px;
+}
+
+/* ==========================================
+   OPTIONAL FULL WIDTH CLASS
+========================================== */
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+
+    .form-section {
+        padding: 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+}
