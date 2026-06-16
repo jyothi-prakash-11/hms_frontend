@@ -97,502 +97,50 @@
 
                 <form [formGroup]="joinusForm" (ngSubmit)="onSubmit()" class="join-form">
 
-                    <!-- BASIC INFORMATION -->
+                    <app-user-form [form]="joinusForm.controls.userInfo" [roles]="roles"></app-user-form>
 
-                    <div class="form-section">
+                    <div class="form-group">
 
-                        <h3>
-                            Basic Information
-                        </h3>
+                        <label>
+                            Password
+                        </label>
 
-                        <div class="form-grid">
+                        <input type="password" formControlName="password" placeholder="Enter Password">
 
-                            <!-- FIRST NAME -->
+                        @if(
+                        joinusForm.controls.password.touched &&
+                        joinusForm.controls.password.invalid
+                        ){
 
-                            <div class="form-group">
+                        <small class="error">
 
-                                <label>
-                                    First Name
-                                </label>
+                            @if(
+                            joinusForm.controls.password.errors?.['required']
+                            ){
 
-                                <input type="text" formControlName="firstName" placeholder="Enter First Name">
+                            Password is required
 
-                                @if(
-                                joinusForm.controls.firstName.touched &&
-                                joinusForm.controls.firstName.invalid
-                                ){
+                            }
 
-                                <small class="error">
+                            @if(
+                            joinusForm.controls.password.errors?.['minlength']
+                            ){
 
-                                    @if(
-                                    joinusForm.controls.firstName.errors?.['required']
-                                    ){
+                            Password must be at least 8 characters
 
-                                    First name is required
+                            }
 
-                                    }
+                        </small>
 
-                                    @if(
-                                    joinusForm.controls.firstName.errors?.['minlength']
-                                    ){
-
-                                    Minimum 2 characters required
-
-                                    }
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                            <!-- LAST NAME -->
-
-                            <div class="form-group">
-
-                                <label>
-                                    Last Name
-                                </label>
-
-                                <input type="text" formControlName="lastName" placeholder="Enter Last Name">
-
-                                @if(
-                                joinusForm.controls.lastName.touched &&
-                                joinusForm.controls.lastName.invalid
-                                ){
-
-                                <small class="error">
-
-                                    @if(
-                                    joinusForm.controls.lastName.errors?.['required']
-                                    ){
-
-                                    Last name is required
-
-                                    }
-
-                                    @if(
-                                    joinusForm.controls.lastName.errors?.['minlength']
-                                    ){
-
-                                    Minimum 2 characters required
-
-                                    }
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                            <!-- EMAIL -->
-
-                            <div class="form-group full-width">
-
-                                <label>
-                                    Email Address
-                                </label>
-
-                                <input type="email" formControlName="email" readonly>
-
-                            </div>
-
-                            <!-- PHONE -->
-
-                            <div class="form-group">
-
-                                <label>
-                                    Phone Number
-                                </label>
-
-                                <input type="text" formControlName="phone" placeholder="Enter Phone Number">
-
-                                @if(
-                                joinusForm.controls.phone.touched &&
-                                joinusForm.controls.phone.invalid
-                                ){
-
-                                <small class="error">
-
-                                    @if(
-                                    joinusForm.controls.phone.errors?.['required']
-                                    ){
-
-                                    Phone number is required
-
-                                    }
-
-                                    @if(
-                                    joinusForm.controls.phone.errors?.['pattern']
-                                    ){
-
-                                    Enter valid 10 digit phone number
-
-                                    }
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                            <!-- PASSWORD -->
-
-                            <div class="form-group">
-
-                                <label>
-                                    Password
-                                </label>
-
-                                <input type="password" formControlName="password" placeholder="Enter Password">
-
-                                @if(
-                                joinusForm.controls.password.touched &&
-                                joinusForm.controls.password.invalid
-                                ){
-
-                                <small class="error">
-
-                                    @if(
-                                    joinusForm.controls.password.errors?.['required']
-                                    ){
-
-                                    Password is required
-
-                                    }
-
-                                    @if(
-                                    joinusForm.controls.password.errors?.['minlength']
-                                    ){
-
-                                    Password must be at least 8 characters
-
-                                    }
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                    <h3>
-                        Employment Information
-                    </h3>
-                    <select formControlName="department">
-                    
-                        <option value="">
-                            Select Department
-                        </option>
-                    
-                        <option value="OPD">
-                            OPD
-                        </option>
-                    
-                        <option value="IPD">
-                            IPD
-                        </option>
-                    
-                        <option value="LAB">
-                            LAB
-                        </option>
-                    
-                        <option value="PHARMACY">
-                            PHARMACY
-                        </option>
-                    
-                        <option value="ADMIN">
-                            ADMIN
-                        </option>
-                    
-                    </select>
-
-                    <!-- EMPLOYMENT INFORMATION -->
-
-                    <div class="form-section">
-
-                        <h3>
-                            Employment Information
-                        </h3>
-
-                        <div class="form-grid">
-
-                            <!-- ROLE -->
-
-                            <div class="form-group">
-
-                                <label>
-                                    Role
-                                </label>
-
-                                <select formControlName="role">
-
-                                    <option value="">
-                                        Select Role
-                                    </option>
-
-                                    @for (
-                                    role of roles;
-                                    track role.name
-                                    ) {
-
-                                    <option [value]="role.name">
-
-                                        {{ role.name }}
-
-                                    </option>
-
-                                    }
-
-                                </select>
-
-                                @if(
-                                joinusForm.controls.role.touched &&
-                                joinusForm.controls.role.invalid
-                                ){
-
-                                <small class="error">
-
-                                    Please select a role
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                            <!-- DEPARTMENT -->
-
-                            <div class="form-group">
-
-                                <label>
-                                    Department
-                                </label>
-
-                                <select formControlName="department">
-
-                                    <option value="">
-                                        Select Department
-                                    </option>
-
-                                    @for (
-                                    department of departments();
-                                    track department
-                                    ) {
-
-                                    <option [value]="department">
-
-                                        {{ department }}
-
-                                    </option>
-
-                                    }
-
-                                </select>
-
-                                @if(
-                                joinusForm.controls.department.touched &&
-                                joinusForm.controls.department.invalid
-                                ){
-
-                                <small class="error">
-
-                                    Please select a department
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                            <!-- DESIGNATION -->
-
-                            <div class="form-group">
-
-                                <label>
-                                    Designation
-                                </label>
-
-                                <input type="text" formControlName="designation" placeholder="Enter Designation">
-
-                                @if(
-                                joinusForm.controls.designation.touched &&
-                                joinusForm.controls.designation.invalid
-                                ){
-
-                                <small class="error">
-
-                                    Designation is required
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                            <!-- JOINING DATE -->
-
-                            <div class="form-group">
-
-                                <label>
-                                    Joining Date
-                                </label>
-
-                                <input type="date" formControlName="joiningDate" [min]="today">
-
-                                @if(
-                                joinusForm.controls.joiningDate.touched &&
-                                joinusForm.controls.joiningDate.invalid
-                                ){
-
-                                <small class="error">
-
-                                    Joining date is required
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                        </div>
+                        }
 
                     </div>
 
-                    <!-- DOCTOR INFORMATION -->
+                    <app-employee-form [form]="joinusForm.controls.employeeInfo"></app-employee-form>
 
                     @if(selectedRole === 'Doctor') {
 
-                    <div class="form-section">
-
-                        <h3>
-                            Doctor Information
-                        </h3>
-
-                        <div class="form-grid">
-
-                            <div class="form-group">
-
-                                <label>
-                                    Specialization
-                                </label>
-
-                                <input type="text" formControlName="specialization" placeholder="Enter Specialization">
-
-                                @if(
-                                joinusForm.controls.specialization.touched &&
-                                joinusForm.controls.specialization.invalid
-                                ){
-
-                                <small class="error">
-
-                                    Specialization is required
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                            <div class="form-group">
-
-                                <label>
-                                    Qualification
-                                </label>
-
-                                <input type="text" formControlName="qualification" placeholder="Enter Qualification">
-
-                                @if(
-                                joinusForm.controls.qualification.touched &&
-                                joinusForm.controls.qualification.invalid
-                                ){
-
-                                <small class="error">
-
-                                    Qualification is required
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                            <div class="form-group">
-
-                                <label>
-                                    Consultation Fee
-                                </label>
-
-                                <input type="number" formControlName="consultationFee" placeholder="Consultation Fee">
-
-                                @if(
-                                joinusForm.controls.consultationFee.touched &&
-                                joinusForm.controls.consultationFee.invalid
-                                ){
-
-                                <small class="error">
-
-                                    Consultation fee is required
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                            <div class="form-group">
-
-                                <label>
-                                    Medical Registration No
-                                </label>
-
-                                <input type="text" formControlName="medicalRegistrationNo"
-                                    placeholder="Registration Number">
-
-                                @if(
-                                joinusForm.controls.medicalRegistrationNo.touched &&
-                                joinusForm.controls.medicalRegistrationNo.invalid
-                                ){
-
-                                <small class="error">
-
-                                    Medical registration number is required
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                            <div class="form-group">
-
-                                <label>
-                                    Experience (Years)
-                                </label>
-
-                                <input type="number" formControlName="experienceYears"
-                                    placeholder="Years of Experience">
-
-                                @if(
-                                joinusForm.controls.experienceYears.touched &&
-                                joinusForm.controls.experienceYears.invalid
-                                ){
-
-                                <small class="error">
-
-                                    Experience is required
-
-                                </small>
-
-                                }
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                    <app-doctor-form [form]="joinusForm.controls.doctorInfo"></app-doctor-form>
 
                     }
 
@@ -611,39 +159,37 @@
         </div>
 
     </div>
-    @if(verificationMailSent()){
-    
+
+    @if(verificationMailSent()) {
+
     <div class="login-panel">
-    
+
         <div class="success-card">
-    
+
             <div class="success-icon">
                 ✓
             </div>
-    
+
             <h2>
                 Verify Your Email
             </h2>
-    
+
             <p>
-                A verification email has been sent
-                to your email address.
+                A verification email has been sent to your email address.
             </p>
-    
+
             <p>
-                Please verify your email before
-                your request can be submitted for
-                administrator approval.
+                Please verify your email before your request can be submitted for administrator approval.
             </p>
-    
+
             <button type="button" class="primary-btn" routerLink="/auth/login">
-    
                 Back To Login
-    
             </button>
-    
+
         </div>
-    
+
     </div>
-    
+
     }
+
+</div>

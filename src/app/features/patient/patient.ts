@@ -19,7 +19,7 @@ export class Patient implements OnInit {
   showPatientForm = signal(false);
   showEmailCheckingForm = signal(false);
 
-  // Async Async Form Pending Load Trackers
+  // Async Form Pending Load Trackers
   isCheckingPatient = signal(false);
   isCreatingPatient = signal(false);
 
@@ -88,10 +88,11 @@ export class Patient implements OnInit {
     }
 
     this.expandedPatientEmail.set(email);
-    this.selectedPatient.set(null); // Reset detail viewport to show loading spinner state gracefully
+    this.selectedPatient.set(null);
 
     this.patientService.getPatientByEmail(email).subscribe({
       next: (res) => {
+        console.log("RES : ",res);
         this.selectedPatient.set(res.data);
       },
       error: (err) => console.error('Failed to resolve targeted patient record details:', err)

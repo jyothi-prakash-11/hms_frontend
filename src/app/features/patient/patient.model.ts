@@ -28,7 +28,6 @@ export interface Patient {
 
 }
 export interface PatientDetails {
-
     userId: {
 
         firstName: string;

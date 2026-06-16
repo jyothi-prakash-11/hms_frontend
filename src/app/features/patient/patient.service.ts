@@ -15,7 +15,7 @@ export class PatientService {
         return this.http.get<ApiResponse<PatientSummary[]>>(`${this.BASE_URL}/`);
     }
     getPatientByEmail(email: string) {
-        return this.http.get<ApiResponse<PatientDetails>>(`${this.BASE_URL}?email=${email}`);
+        return this.http.get<ApiResponse<PatientDetails>>(`${this.BASE_URL}/search?query=${email}`);
     }
     canEditPatient(): boolean {
         return this.authService.hasAccess(PATIENT_ACTIONS.EDIT);
