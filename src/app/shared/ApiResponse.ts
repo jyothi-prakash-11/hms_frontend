@@ -3,3 +3,9 @@ export interface ApiResponse<T>{
     success: boolean;
     data: T
 }
+export interface PaginationMetadata {
+    totalRecords: number;
+    currentPage: number;
+    fixedLimit: number;
+    totalPages: number;
+}

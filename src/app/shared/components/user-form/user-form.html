@@ -39,7 +39,7 @@
                 <small class="error-text">Enter a valid 10-digit phone number</small>
                 }
             </div>
-
+            @if (!hideRole()) {
             <div class="form-group">
                 <label for="role">Role</label>
                 <select id="role" formControlName="roleName">
@@ -53,6 +53,7 @@
                 <small class="error-text">Please select a role</small>
                 }
             </div>
+            }
         </div>
     </div>
 </div>

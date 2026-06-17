@@ -1,13 +1,16 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit, signal, computed, effect, ChangeDetectorRef, inject } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormControl, FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PatientService } from './patient.service';
 import { CreatePatientRequest, PatientDetails, PatientSummary } from './patient.model';
+import { UserForm } from '../../shared/components/user-form/user-form';
+import { PatientFrom } from '../../shared/components/patient-from/patient-from';
+import { RolesResponse } from '../auth/auth.model';
 
 @Component({
   selector: 'app-patient',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DatePipe, UserForm, PatientFrom],
   templateUrl: './patient.html',
   styleUrls: ['./patient.css'],
 })
@@ -15,9 +18,14 @@ export class Patient implements OnInit {
   // Core State Trackers (Signals)
   patients = signal<PatientSummary[]>([]);
   selectedPatient = signal<PatientDetails | null>(null);
-  expandedPatientEmail = signal<string | null>(null);
+  expandedPatientId = signal<string | null>(null);
   showPatientForm = signal(false);
   showEmailCheckingForm = signal(false);
+  roles = signal<RolesResponse[]>([]);
+  // Pagination
+  currentPage = signal(1);
+  totalPages = signal(1);
+  totalRecords = signal(0);
 
   // Async Form Pending Load Trackers
   isCheckingPatient = signal(false);
@@ -27,75 +35,91 @@ export class Patient implements OnInit {
   statusMessage = signal<string | null>('');
   successMessage = signal<string | null>('');
 
-  // SEARCH IMPLEMENTATION ENGINE
-  // Two-way bound data signal feeding your directory compute pipe
+  // Search Engine Value Tracker
   searchText = signal('');
 
-  // Computed Derived Reactive Signal: Auto-filters the directory array instantly on keystroke changes
-  filteredPatients = computed(() => {
-    const query = this.searchText().toLowerCase().trim();
-    if (!query) {
-      return this.patients();
-    }
-    return this.patients().filter(p =>
-      p.userId.firstName.toLowerCase().includes(query) ||
-      p.userId.lastName.toLowerCase().includes(query) ||
-      p.userId.email.toLowerCase().includes(query) ||
-      p.userId.phone.includes(query)
-    );
-  });
-
-  // Independent Pre-Verification Email Controller Bounds
+  // Pre-Verification Email Control
   emailControl = new FormControl('', [
     Validators.required,
     Validators.email
   ]);
 
-  // Unified Registration Form Controls Tree Structure
-  patientForm = new FormGroup({
-    firstName: new FormControl('', [Validators.required]),
-    lastName: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{10}$')]),
-    gender: new FormControl('', [Validators.required]),
-    dob: new FormControl('', [Validators.required]),
-    bloodGroup: new FormControl('', [Validators.required]),
-    address: new FormControl('', [Validators.required]),
-    emergencyContactName: new FormControl('', [Validators.required]),
-    emergencyContactPhone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{10}$')])
+  //form builder for patient form
+  private fb = inject(NonNullableFormBuilder);
+  patientForm = this.fb.group({
+
+    userFields: this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      roleName: [{ value: 'Patient', disabled: true }, Validators.required]
+    }),
+
+    patientFields: this.fb.group({
+      gender: ['', Validators.required],
+      dob: ['', Validators.required],
+      bloodGroup: ['', Validators.required],
+      address: ['', Validators.required],
+      emergencyContactName: ['', Validators.required],
+      emergencyContactPhone: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]]
+    })
+
   });
 
-  constructor(private patientService: PatientService) { }
+  constructor(private patientService: PatientService, private cdr: ChangeDetectorRef) {
+    effect(() => {
+      const text = this.searchText();
+      console.log("searching text ...:", text);
+
+      const handler = setTimeout(() => {
+        this.loadPatients(1, text);
+      }, 400);
+
+      return () => clearTimeout(handler);
+    }, { allowSignalWrites: true });
+  }
 
   ngOnInit(): void {
     this.loadPatients();
   }
 
-  loadPatients(): void {
-    this.patientService.getPatientSummary().subscribe({
+  loadPatients(page: number = 1, search: string = this.searchText()): void {
+    this.patientService.getPatientSummary(page, search).subscribe({
       next: (res) => {
-        this.patients.set(res.data || []);
+        this.patients.set(res.data.patientData || []);
+        console.log('patients Data : ', res.data.patientData);
+        const paginationData = res.data.pagination;
+        if (paginationData) {
+          this.currentPage.set(paginationData.currentPage);
+          this.totalPages.set(paginationData.totalPages);
+          this.totalRecords.set(paginationData.totalRecords);
+        }
       },
       error: (err) => console.error('Failed to load patient ledger data:', err)
     });
   }
 
-  togglePatient(email: string): void {
-    if (this.expandedPatientEmail() === email) {
-      this.expandedPatientEmail.set(null);
+  togglePatient(patientUhid: string): void {
+    if (this.expandedPatientId() === patientUhid) {
+      this.expandedPatientId.set(null);
       this.selectedPatient.set(null);
       return;
     }
-
-    this.expandedPatientEmail.set(email);
+    this.expandedPatientId.set(patientUhid);
     this.selectedPatient.set(null);
 
-    this.patientService.getPatientByEmail(email).subscribe({
+    this.patientService.getPatientByUhid(patientUhid).subscribe({
       next: (res) => {
-        console.log("RES : ",res);
-        this.selectedPatient.set(res.data);
+        if (this.expandedPatientId() === patientUhid) {
+          this.selectedPatient.set(res.data);
+        }
       },
-      error: (err) => console.error('Failed to resolve targeted patient record details:', err)
+      error: (err) => {
+        console.error('Failed to resolve patient metadata via database index lookups:', err);
+        this.selectedPatient.set(null);
+        this.expandedPatientId.set(null);
+      }
     });
   }
 
@@ -107,11 +131,13 @@ export class Patient implements OnInit {
     return this.patientService.canAddPatient();
   }
 
-  openAddPatient(): void {
+  onAddPatient(): void {
     this.emailControl.reset();
     this.statusMessage.set('');
     this.showEmailCheckingForm.set(true);
     this.showPatientForm.set(false);
+    this.patientForm.reset();
+    document.body.style.overflow = 'hidden';
   }
 
   checkPatient(): void {
@@ -124,13 +150,15 @@ export class Patient implements OnInit {
     this.patientService.checkPatientExists(email).subscribe({
       next: (res) => {
         this.isCheckingPatient.set(false);
+
         if (res.data.exist) {
           this.statusMessage.set('Patient already exists with this email address.');
         } else {
           this.patientForm.reset();
-          this.patientForm.patchValue({ email: email });
+          this.patientForm.controls.userFields.patchValue({ email: email });
           this.showEmailCheckingForm.set(false);
           this.showPatientForm.set(true);
+          this.cdr.markForCheck();
         }
       },
       error: (err) => {
@@ -148,19 +176,18 @@ export class Patient implements OnInit {
     }
 
     this.isCreatingPatient.set(true);
-    const payload = this.patientForm.getRawValue() as CreatePatientRequest;
+    const userValues = this.patientForm.controls.userFields.getRawValue();
+    const patientValues = this.patientForm.controls.patientFields.getRawValue();
+    const payload: CreatePatientRequest = {
+      ...userValues,
+      ...patientValues
+    } as CreatePatientRequest;
 
     this.patientService.createPatient(payload).subscribe({
       next: (res) => {
         this.isCreatingPatient.set(false);
-
-        // Push the newly registered summary record directly to the front of the reactive signals stack array
-        this.patients.update(list => [res.data, ...list]);
-
-        this.successMessage.set('Patient registered successfully.');
-        setTimeout(() => this.successMessage.set(''), 4000);
-
         this.closeModal();
+        this.loadPatients(this.currentPage(), this.searchText());
       },
       error: (err) => {
         this.isCreatingPatient.set(false);
@@ -175,5 +202,19 @@ export class Patient implements OnInit {
     this.patientForm.reset();
     this.emailControl.reset();
     this.statusMessage.set('');
+    document.body.style.overflow = 'auto';
+  }
+
+  // Navigation Methods 
+  goToNextPage(): void {
+    if (this.currentPage() < this.totalPages()) {
+      this.loadPatients(this.currentPage() + 1, this.searchText());
+    }
+  }
+
+  goToPrevPage(): void {
+    if (this.currentPage() > 1) {
+      this.loadPatients(this.currentPage() - 1, this.searchText());
+    }
   }
 }

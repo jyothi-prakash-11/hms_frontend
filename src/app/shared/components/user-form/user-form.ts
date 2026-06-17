@@ -11,5 +11,6 @@ import { RolesResponse } from '../../../features/auth/auth.model';
 })
 export class UserForm {
   form = input.required<FormGroup>();
+  hideRole = input<boolean>(false);
   roles = input.required<RolesResponse[]>();
 }

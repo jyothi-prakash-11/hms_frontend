@@ -1,32 +1,5 @@
-export interface Patient {
-
-    userId: {
-
-        firstName: string;
-
-        lastName: string;
-
-        email: string;
-
-        phone: string;
-
-    };
-
-    UHID: string;
-
-    gender: string;
-
-    dob: string;
-
-    bloodGroup: string;
-
-    address: string;
-
-    emergencyContactName: string;
-
-    emergencyContactPhone: string;
-
-}
+import { PaginationMetadata } from "../../shared/ApiResponse";
+// detailed patient info
 export interface PatientDetails {
     userId: {
 
@@ -55,6 +28,7 @@ export interface PatientDetails {
     emergencyContactPhone: string;
 
 }
+// patient details outlining
 export interface PatientSummary {
 
     _id: string;
@@ -101,4 +75,9 @@ export interface CreatePatientRequest {
 
     emergencyContactPhone: string;
 
+}
+// maps initial load compiling pagination
+export interface PatientSummaryResponse {
+    patientData: PatientSummary[];
+    pagination: PaginationMetadata;
 }

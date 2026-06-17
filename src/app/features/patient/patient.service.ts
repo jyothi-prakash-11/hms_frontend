@@ -1,7 +1,7 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ApiResponse } from "../../shared/ApiResponse";
-import { CreatePatientRequest, PatientDetails, PatientExistsResponse, PatientSummary } from "./patient.model";
+import { CreatePatientRequest, PatientDetails, PatientExistsResponse, PatientSummary, PatientSummaryResponse } from "./patient.model";
 import { AuthService } from "../auth/auth.service";
 import { PATIENT_ACTIONS } from "./patient.permissions";
 
@@ -11,11 +11,15 @@ import { PATIENT_ACTIONS } from "./patient.permissions";
 export class PatientService {
     BASE_URL = 'http://localhost:3000/api/patients'
     constructor(private http: HttpClient, private authService: AuthService) { }
-    getPatientSummary() {
-        return this.http.get<ApiResponse<PatientSummary[]>>(`${this.BASE_URL}/`);
+    getPatientSummary(page: number = 1,search: string ) {
+        let params = new HttpParams().set('page', page.toString());
+        if (search && search.trim()) {
+            params = params.set('search', search.trim());
+        }
+        return this.http.get<ApiResponse<PatientSummaryResponse>>(`${this.BASE_URL}/`, { params });    
     }
-    getPatientByEmail(email: string) {
-        return this.http.get<ApiResponse<PatientDetails>>(`${this.BASE_URL}/search?query=${email}`);
+    getPatientByUhid(id: string) {
+        return this.http.get<ApiResponse<PatientDetails>>(`${this.BASE_URL}/${id}`);
     }
     canEditPatient(): boolean {
         return this.authService.hasAccess(PATIENT_ACTIONS.EDIT);

@@ -1,0 +1,62 @@
+@if (form()) {
+<div [formGroup]="form()" class="form-card">
+    <div class="form-section">
+        <h3>Patient Information</h3>
+
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Gender</label>
+                <select formControlName="gender">
+                    <option value="">Select Gender</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
+                </select>
+                @if (form().get('gender')?.touched && form().get('gender')?.invalid) {
+                <small class="error-text">Gender is required</small>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" formControlName="dob">
+                @if (form().get('dob')?.touched && form().get('dob')?.invalid) {
+                <small class="error-text">Date of birth is required</small>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Blood Group</label>
+                <input type="text" formControlName="bloodGroup" placeholder="Enter Blood Group">
+                @if (form().get('bloodGroup')?.touched && form().get('bloodGroup')?.invalid) {
+                <small class="error-text">Blood group is required</small>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Address</label>
+                <input type="text" formControlName="address" placeholder="Enter Residential Address">
+                @if (form().get('address')?.touched && form().get('address')?.invalid) {
+                <small class="error-text">Address is required</small>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Emergency Contact Name</label>
+                <input type="text" formControlName="emergencyContactName" placeholder="Enter Contact Name">
+                @if (form().get('emergencyContactName')?.touched && form().get('emergencyContactName')?.invalid) {
+                <small class="error-text">Emergency contact name is required</small>
+                }
+            </div>
+
+            <div class="form-group">
+                <label>Emergency Contact Phone</label>
+                <input type="text" formControlName="emergencyContactPhone" placeholder="Enter Contact Number">
+                @if (form().get('emergencyContactPhone')?.touched && form().get('emergencyContactPhone')?.invalid) {
+                <small class="error-text">Enter a valid 10-digit phone number</small>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+}
