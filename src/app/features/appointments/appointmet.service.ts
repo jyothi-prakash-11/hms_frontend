@@ -11,8 +11,9 @@ import { APPOINTMENT_ACTIONS } from "./appointment.permissions";
 export default class AppointmentService {
     constructor(private http: HttpClient, private authService: AuthService) { }
     BASE_URL = 'http://localhost:3000/api/appointments';
-    getAppointments() {
-        return this.http.get<ApiResponse<AppointmentResponse[]>>(`${this.BASE_URL}`);
+    getAppointments(date: string = '') {
+        const options = date ? { params: { date } } : {};
+        return this.http.get<ApiResponse<AppointmentResponse[]>>(`${this.BASE_URL}`, options);
     }
     canAddAppointment() {
         return this.authService.hasAccess(APPOINTMENT_ACTIONS.CREATE);
@@ -20,7 +21,7 @@ export default class AppointmentService {
     canUpdateAppointment() {
         return this.authService.hasAccess(APPOINTMENT_ACTIONS.UPDATE_STATUS);
     }
-    updateAppointmentStatus(appointmentId: string,status: string){
-        return this.http.patch<ApiResponse<AppointmentResponse>>(`${this.BASE_URL}/${appointmentId}/status`,{status});
+    updateAppointmentStatus(appointmentId: string, status: string) {
+        return this.http.patch<ApiResponse<AppointmentResponse>>(`${this.BASE_URL}/${appointmentId}/status`, { status });
     }
 }

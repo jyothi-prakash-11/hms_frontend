@@ -93,7 +93,7 @@ export class Patient implements OnInit {
         if (paginationData) {
           this.currentPage.set(paginationData.currentPage);
           this.totalPages.set(paginationData.totalPages);
-          this.totalRecords.set(paginationData.totalRecords);
+          this.totalRecords.set(paginationData.total);
         }
       },
       error: (err) => console.error('Failed to load patient ledger data:', err)

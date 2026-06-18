@@ -3,10 +3,11 @@
     <div class="page-header">
         <div>
             <h1>Doctors</h1>
-            <p>Manage doctor records and registrations</p>
+            <p>Manage doctor profiles and clinical information</p>
         </div>
+
         @if (canAdd()) {
-        <button class="primary-btn" (click)="openAddDoctor()">
+        <button class="primary-btn" type="button" (click)="openAddDoctor()">
             Add Doctor
         </button>
         }
@@ -14,103 +15,220 @@
 
     <div class="content-card">
 
-        <div class="section-header">
-            <h3>Doctor Directory</h3>
+        <div class="schedule-control-bar">
+            <div class="search-box">
+                <input type="text" [formControl]="searchControl" placeholder="Search doctor, email or employee code">
+
+                <span class="search-icon-indicator">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </span>
+
+                @if (searchControl.value) {
+                <button class="btn-clear" type="button" (click)="searchControl.setValue('')">
+                    &times;
+                </button>
+                }
+            </div>
         </div>
 
-        @if (doctors().length === 0) {
+        @if (isLoading()) {
+
+        <div class="loading-state">
+            <div class="spinner"></div>
+            <p>Loading doctors...</p>
+        </div>
+
+        } @else if (doctors().length === 0) {
+
         <div class="empty-state">
             <h3>No Doctors Found</h3>
-            <p>Create your first doctor record.</p>
+            <p>No doctor records are available.</p>
         </div>
+
         } @else {
-        <div class="doctors-header">
-            <div>Name</div>
+
+        <div class="appointments-header">
+            <div>Employee Code</div>
+            <div>Doctor</div>
             <div>Email</div>
             <div>Department</div>
+            <div>Fee</div>
             <div>Actions</div>
         </div>
 
         @for (doctor of doctors(); track doctor._id) {
-        <div class="doctor-card">
 
-            <div class="doctor-summary" (click)="toggleDoctor(doctor.employeeId.userId.email)">
-                <div class="doctor-col doctor-name">
-                    {{ doctor.employeeId.userId.firstName }}
-                    {{ doctor.employeeId.userId.lastName }}
+        <div class="appointment-row" [class.is-expanded]="expandedDoctorCode() === doctor.employeeId.employeeCode">
+
+            <div class="appointment-summary" (click)="toggleDoctor(doctor.employeeId.employeeCode)">
+
+                <div class="doctor-code-id">
+                    {{ doctor.employeeId.employeeCode }}
                 </div>
 
-                <div class="doctor-col">
-                    {{ doctor.employeeId.userId.email }}
+                <div class="patient-name">
+                    Dr. {{ doctor.userId.firstName }}
+                    {{ doctor.userId.lastName }}
                 </div>
 
-                <div class="doctor-col">
+                <div class="patient-email">
+                    {{ doctor.userId.email }}
+                </div>
+
+                <div>
                     {{ doctor.employeeId.department }}
                 </div>
 
-                <div class="doctor-actions">
+                <div class="fee-text-amount">
+                    ₹{{ doctor.consultationFee }}
+                </div>
+
+                <div class="col-actions" (click)="$event.stopPropagation()">
+
                     @if (canEdit()) {
-                    <button class="secondary-btn" (click)="$event.stopPropagation()">
+                    <button class="secondary-btn" type="button" (click)="editDoctor(doctor.employeeId.employeeCode)">
                         Edit
                     </button>
                     }
                 </div>
+
             </div>
 
-            @if (expandedDoctorEmail() === doctor.employeeId.userId.email) {
-            <div class="doctor-details">
+            @if (expandedDoctorCode() === doctor.employeeId.employeeCode) {
+
+            <div class="appointment-details">
+
+                @if (isDetailLoading()) {
+
+                <div class="nested-mini-loader">
+                    <div class="small-spinner"></div>
+                    <span>Loading profile details...</span>
+                </div>
+
+                } @else if (activeDoctorDetail()) {
+
                 <div class="details-section">
-                    <h4>Doctor Information</h4>
+                    <h4>Professional Information</h4>
 
                     <div class="details-grid">
+
                         <div class="detail-item">
-                            <label>Employee ID</label>
-                            <span>{{ doctor.employeeId.employeeCode }}</span>
+                            <label>Designation</label>
+                            <span>
+                                {{ activeDoctorDetail()?.employeeId?.designation || 'N/A' }}
+                            </span>
                         </div>
 
                         <div class="detail-item">
                             <label>Specialization</label>
-                            <span>{{ doctor.specialization }}</span>
+                            <span>
+                                {{ activeDoctorDetail()?.specialization || 'N/A' }}
+                            </span>
                         </div>
 
                         <div class="detail-item">
                             <label>Qualification</label>
-                            <span>{{ doctor.qualification }}</span>
+                            <span>
+                                {{ activeDoctorDetail()?.qualification || 'N/A' }}
+                            </span>
                         </div>
 
                         <div class="detail-item">
                             <label>Experience</label>
-                            <span>{{ doctor.experienceYears }} Years</span>
+                            <span>
+                                {{ activeDoctorDetail()?.experienceYears }} Years
+                            </span>
                         </div>
 
-                        <div class="detail-item">
-                            <label>Consultation Fee</label>
-                            <span>₹{{ doctor.consultationFee }}</span>
-                        </div>
-
-                        <div class="detail-item">
-                            <label>Registration No</label>
-                            <span>{{ doctor.medicalRegistrationNo }}</span>
-                        </div>
-
-                        <div class="detail-item">
-                            <label>Available</label>
-                            <span>{{ doctor.availabilityStartTime }} - {{ doctor.availabilityEndTime }}</span>
-                        </div>
                     </div>
                 </div>
+
+                <div class="details-section">
+                    <h4>Employment Information</h4>
+
+                    <div class="details-grid">
+
+                        <div class="detail-item">
+                            <label>Medical Registration No.</label>
+                            <span>
+                                {{ activeDoctorDetail()?.medicalRegistrationNo || 'N/A' }}
+                            </span>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Availability</label>
+                            <span>
+                                {{ activeDoctorDetail()?.availabilityStartTime || '00:00' }}
+                                -
+                                {{ activeDoctorDetail()?.availabilityEndTime || '00:00' }}
+                            </span>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Phone</label>
+                            <span>
+                                {{ activeDoctorDetail()?.userId?.phone || doctor.userId.phone }}
+                            </span>
+                        </div>
+
+                        <div class="detail-item">
+                            <label>Joining Date</label>
+                            <span>
+                                {{ activeDoctorDetail()?.employeeId?.joiningDate | date:'dd MMM yyyy' }}
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+                }
+
             </div>
+
             }
 
         </div>
+
         }
+
+        <div class="pagination-footer-bar">
+
+            <div class="pagination-summary">
+                Showing page
+                <strong>{{ currentPage() }}</strong>
+                of
+                <strong>{{ totalPages() }}</strong>
+            </div>
+
+            <div class="pagination-actions">
+
+                <button class="nav-btn" [disabled]="currentPage() === 1 || isLoading()" (click)="goToPage(-1)">
+                    Previous
+                </button>
+
+                <button class="nav-btn" [disabled]="currentPage() === totalPages() || isLoading()"
+                    (click)="goToPage(1)">
+                    Next
+                </button>
+
+            </div>
+
+        </div>
+
         }
 
     </div>
+
 </div>
 
 @if (showDoctorEmailForm() || showDoctorModal()) {
+
 <div class="modal-backdrop">
+
     <div class="modal">
 
         <button type="button" class="modal-close-btn" (click)="closeDoctorModal()">
@@ -118,48 +236,53 @@
         </button>
 
         @if (showDoctorEmailForm()) {
+
         <div class="modal-header">
-            <div>
-                <h2>Add Doctor</h2>
-                <p>Verify doctor email before registration</p>
-            </div>
+            <h2>New Doctor Registration</h2>
+            <p>Verify email before creating doctor profile</p>
         </div>
 
         <div class="modal-body">
-            <div class="form-card">
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" [formControl]="emailControl">
-                </div>
 
-                <button type="button" class="primary-btn" (click)="checkDoctor()"
-                    [disabled]="emailControl.invalid || isCheckingDoctor()">
+            <div class="form-group">
+                <label>Email Address</label>
+
+                <input type="email" [formControl]="emailControl" placeholder="doctor@hospital.com">
+            </div>
+
+            @if (doctorStatusMessage()) {
+            <div class="system-validation-msg">
+                {{ doctorStatusMessage() }}
+            </div>
+            }
+
+            <div class="form-footer-actions">
+                <button type="button" class="primary-btn" [disabled]="emailControl.invalid || isCheckingDoctor()"
+                    (click)="checkDoctor()">
+
                     @if (isCheckingDoctor()) {
                     Checking...
                     } @else {
                     Proceed
                     }
-                </button>
 
-                @if (doctorStatusMessage()) {
-                <div class="info-message">
-                    {{ doctorStatusMessage() }}
-                </div>
-                }
+                </button>
             </div>
+
         </div>
+
         }
 
         @if (showDoctorModal()) {
+
         <div class="modal-header">
-            <div>
-                <h2>Add Doctor</h2>
-                <p>Register a new doctor</p>
-            </div>
+            <h2>New Doctor Registration</h2>
+            <p>Create a doctor profile and employment record</p>
         </div>
 
         <div class="modal-body modal-body--scrollable">
-            <form [formGroup]="doctorForm" (ngSubmit)="createDoctor()" class="doctor-form">
+
+            <form [formGroup]="doctorForm" (ngSubmit)="createDoctor()">
 
                 <app-user-form [form]="doctorForm.controls.userInfo" [roles]="doctorRoles()">
                 </app-user-form>
@@ -170,23 +293,32 @@
                 <app-doctor-form [form]="doctorForm.controls.doctorInfo">
                 </app-doctor-form>
 
-                <div class="form-footer">
+                <div class="form-footer-actions">
+
                     <button type="button" class="secondary-btn" (click)="closeDoctorModal()">
                         Cancel
                     </button>
+
                     <button type="submit" class="primary-btn" [disabled]="doctorForm.invalid || isCreatingDoctor()">
+
                         @if (isCreatingDoctor()) {
                         Creating Doctor...
                         } @else {
                         Create Doctor
                         }
+
                     </button>
+
                 </div>
 
             </form>
+
         </div>
+
         }
 
     </div>
+
 </div>
+
 }

@@ -1,11 +1,11 @@
-export interface ApiResponse<T>{
+export interface ApiResponse<T> {
     statusCode: number;
     success: boolean;
     data: T
 }
 export interface PaginationMetadata {
-    totalRecords: number;
+    total: number;
     currentPage: number;
-    fixedLimit: number;
+    limit: number;
     totalPages: number;
 }

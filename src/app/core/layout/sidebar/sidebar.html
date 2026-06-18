@@ -1,12 +1,23 @@
-<div class="sidebar-nav">
-    <ul>
+<nav class="sidebar-nav">
+
+    <ul class="nav-list">
+
         @for (nav of navItems(); track nav.route) {
-        <li>
-            <a [routerLink]="[baseRoute, nav.route]" routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: nav.route === '' || nav.route === '/' }">
-                <span class="nav-label">{{ nav.label }}</span>
+
+        <li class="nav-item">
+
+            <a [routerLink]="[baseRoute, nav.route]" routerLinkActive="active" [routerLinkActiveOptions]="{
+                    exact: nav.route === '' || nav.route === '/'
+                }">
+
+                {{ nav.label }}
+
             </a>
+
         </li>
+
         }
+
     </ul>
-</div>
+
+</nav>

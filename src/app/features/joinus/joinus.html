@@ -1,8 +1,10 @@
 <div class="join-page">
 
+    @if (!verificationMailSent()) {
+
     <div class="join-container">
 
-        <!-- LEFT BRANDING SECTION -->
+        <!-- Left Branding Panel -->
 
         <div class="join-branding">
 
@@ -18,15 +20,15 @@
 
                 <p>
                     Request access to the Hospital Management System.
-                    Applications are reviewed and approved by administrators
-                    before portal access is granted.
+                    Applications are reviewed by hospital administrators
+                    before access is granted.
                 </p>
 
             </div>
 
         </div>
 
-        <!-- RIGHT FORM SECTION -->
+        <!-- Right Form Panel -->
 
         <div class="join-panel">
 
@@ -44,111 +46,153 @@
 
                 </div>
 
-                <!-- EMAIL VERIFICATION STEP -->
+                <!-- Email Verification Step -->
 
                 @if (showEmailForm()) {
 
-                <div class="email-step">
+                <div class="form-card">
 
-                    <div class="form-group">
+                    <div class="form-section">
 
-                        <label>
-                            Email Address
-                        </label>
+                        <h3>Email Verification</h3>
 
-                        <input type="email" placeholder="Enter Email" [formControl]="emailControl">
+                        <div class="form-grid">
 
-                    </div>
+                            <div class="form-group">
 
-                    <button type="button" class="primary-btn" (click)="checkEmail()" [disabled]="
-                            emailControl.invalid ||
-                            isCheckingMail()
-                        ">
+                                <label>Email Address</label>
 
-                        @if(isCheckingMail()){
+                                <input type="email" placeholder="Enter email address" [formControl]="emailControl">
 
-                        Checking...
+                                @if (
+                                emailControl.touched &&
+                                emailControl.invalid
+                                ) {
 
-                        } @else {
+                                <small class="error-text">
+                                    Please enter a valid email address
+                                </small>
 
-                        Proceed
+                                }
+
+                            </div>
+
+                        </div>
+
+                        @if (statusMessage()) {
+
+                        <div class="info-message">
+                            {{ statusMessage() }}
+                        </div>
 
                         }
 
-                    </button>
+                        <div class="form-footer">
 
-                    @if(statusMessage()){
+                            <button type="button" class="primary-btn" (click)="checkEmail()"
+                                [disabled]="emailControl.invalid || isCheckingMail()">
 
-                    <div class="info-message">
+                                @if (isCheckingMail()) {
 
-                        {{ statusMessage() }}
+                                Checking...
+
+                                } @else {
+
+                                Proceed
+
+                                }
+
+                            </button>
+
+                        </div>
 
                     </div>
-
-                    }
 
                 </div>
 
                 }
 
-                <!-- REGISTRATION FORM -->
+                <!-- Registration Form -->
 
                 @if (showForm()) {
 
                 <form [formGroup]="joinusForm" (ngSubmit)="onSubmit()" class="join-form">
 
-                    <app-user-form [form]="joinusForm.controls.userInfo" [roles]="roles"></app-user-form>
+                    <app-user-form [form]="joinusForm.controls.userInfo" [roles]="roles">
+                    </app-user-form>
 
-                    <div class="form-group">
+                    <!-- Credentials -->
 
-                        <label>
-                            Password
-                        </label>
+                    <div class="form-card">
 
-                        <input type="password" formControlName="password" placeholder="Enter Password">
+                        <div class="form-section">
 
-                        @if(
-                        joinusForm.controls.password.touched &&
-                        joinusForm.controls.password.invalid
-                        ){
+                            <h3>
+                                Account Credentials
+                            </h3>
 
-                        <small class="error">
+                            <div class="form-grid">
 
-                            @if(
-                            joinusForm.controls.password.errors?.['required']
-                            ){
+                                <div class="form-group">
 
-                            Password is required
+                                    <label>Password</label>
 
-                            }
+                                    <input type="password" formControlName="password" placeholder="Enter password">
 
-                            @if(
-                            joinusForm.controls.password.errors?.['minlength']
-                            ){
+                                    @if (
+                                    joinusForm.controls.password.touched &&
+                                    joinusForm.controls.password.invalid
+                                    ) {
 
-                            Password must be at least 8 characters
+                                    <small class="error-text">
 
-                            }
+                                        @if (
+                                        joinusForm.controls.password.errors?.['required']
+                                        ) {
 
-                        </small>
+                                        Password is required
 
-                        }
+                                        }
+
+                                        @if (
+                                        joinusForm.controls.password.errors?.['minlength']
+                                        ) {
+
+                                        Password must be at least 8 characters
+
+                                        }
+
+                                    </small>
+
+                                    }
+
+                                </div>
+
+                            </div>
+
+                        </div>
 
                     </div>
 
-                    <app-employee-form [form]="joinusForm.controls.employeeInfo"></app-employee-form>
+                    <app-employee-form [form]="joinusForm.controls.employeeInfo">
+                    </app-employee-form>
 
-                    @if(selectedRole === 'Doctor') {
+                    @if (selectedRole === 'Doctor') {
 
-                    <app-doctor-form [form]="joinusForm.controls.doctorInfo"></app-doctor-form>
+                    <app-doctor-form [form]="joinusForm.controls.doctorInfo">
+                    </app-doctor-form>
 
                     }
 
-                    <button type="submit" class="primary-btn" [disabled]="joinusForm.invalid">
+                    <div class="form-footer">
 
-                        Submit Request
+                        <button type="submit" class="primary-btn" [disabled]="joinusForm.invalid">
 
-                    </button>
+                            Submit Request
+
+                        </button>
+
+                    </div>
 
                 </form>
 
@@ -160,18 +204,18 @@
 
     </div>
 
-    @if(verificationMailSent()) {
+    }
 
-    <div class="login-panel">
+    <!-- Success Screen -->
+
+    @if (verificationMailSent()) {
+
+    <div class="success-container">
 
         <div class="success-card">
 
-            <div class="success-icon">
-                ✓
-            </div>
-
             <h2>
-                Verify Your Email
+                Email Verification Required
             </h2>
 
             <p>
@@ -179,11 +223,14 @@
             </p>
 
             <p>
-                Please verify your email before your request can be submitted for administrator approval.
+                Please verify your email before your registration request
+                can be submitted for administrator approval.
             </p>
 
             <button type="button" class="primary-btn" routerLink="/auth/login">
+
                 Back To Login
+
             </button>
 
         </div>

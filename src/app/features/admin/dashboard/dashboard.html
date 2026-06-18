@@ -1,44 +1,70 @@
-<div class="page-container">
-    <div class="page-header-container">
-        <div class="page-title-section">
-            <h2>Dashboard</h2>
-            <p class="page-subtitle">Overview of hospital data and statistics</p>
+<div class="page">
+
+    <div class="page-header">
+        <div>
+            <h1>Dashboard</h1>
+            <p>Overview of hospital operations and system statistics</p>
         </div>
     </div>
 
-    <div class="stats-grid-row">
+    <div class="stats-grid">
 
-        <div class="metric-card">
-            <span class="metric-label">Patients</span>
-            <div class="metric-value-display">
+        <div class="stat-card">
+            <div class="stat-label">
+                Total Patients
+            </div>
+
+            <div class="stat-value">
                 {{ dashboard()?.totalPatients || 0 }}
             </div>
-            <p class="metric-helper-text">Total Registered Patients</p>
+
+            <div class="stat-description">
+                Registered patient records
+            </div>
         </div>
 
-        <div class="metric-card">
-            <span class="metric-label">Doctors</span>
-            <div class="metric-value-display">
+        <div class="stat-card">
+            <div class="stat-label">
+                Total Doctors
+            </div>
+
+            <div class="stat-value">
                 {{ dashboard()?.totalDoctors || 0 }}
             </div>
-            <p class="metric-helper-text">Active Doctors</p>
+
+            <div class="stat-description">
+                Active medical practitioners
+            </div>
         </div>
 
-        <div class="metric-card">
-            <span class="metric-label">Employees</span>
-            <div class="metric-value-display">
+        <div class="stat-card">
+            <div class="stat-label">
+                Total Employees
+            </div>
+
+            <div class="stat-value">
                 {{ dashboard()?.totalEmployees || 0 }}
             </div>
-            <p class="metric-helper-text">Hospital Staff</p>
+
+            <div class="stat-description">
+                Hospital staff members
+            </div>
         </div>
 
-        <div class="metric-card alert-state-card" [class.has-pending]="(dashboard()?.pendingApprovals || 0) > 0">
-            <span class="metric-label">Pending Approvals</span>
-            <div class="metric-value-display">
+        <div class="stat-card pending-card">
+            <div class="stat-label">
+                Pending Approvals
+            </div>
+
+            <div class="stat-value">
                 {{ dashboard()?.pendingApprovals || 0 }}
             </div>
-            <p class="metric-helper-text">Requires Review</p>
+
+            <div class="stat-description">
+                Requests awaiting review
+            </div>
         </div>
 
     </div>
+
 </div>

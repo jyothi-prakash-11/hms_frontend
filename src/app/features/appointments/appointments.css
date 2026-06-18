@@ -1,409 +1,329 @@
-/* ==========================================
-   PAGE LAYOUT MAIN WRAPPER
-========================================== */
-
+/* --- Global Utility & Structural Layouts --- */
 .page {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* ==========================================
-   PAGE HEADER
-========================================== */
-
 .page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
 .page-header h1 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: 700;
-    color: #2C2C2A;
+  margin: 0 0 4px 0;
+  font-size: 28px;
+  color: #0f172a;
 }
 
 .page-header p {
-    margin-top: 4px;
-    font-size: 14px;
-    color: #5F5E5A;
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
 }
-
-/* ==========================================
-   CONTENT CARD HOUSING
-========================================== */
-
-.content-card {
-    background: #FFFFFF;
-    border: 0.5px solid #D3D1C7;
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.section-header {
-    padding: 20px 24px;
-}
-
-.section-header h3 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #2C2C2A;
-}
-
-/* ==========================================
-   GRID MATRIX HEADERS
-========================================== */
-
-.appointments-header {
-    display: grid;
-    grid-template-columns: 1.1fr 1.3fr 1.3fr 1.1fr 1.8fr 1fr;
-    padding: 14px 24px;
-    background: #F1EFE8;
-    border-top: 0.5px solid #D3D1C7;
-    border-bottom: 0.5px solid #D3D1C7;
-    font-size: 13px;
-    font-weight: 600;
-    color: #5F5E5A;
-}
-
-/* ==========================================
-   TABLE ROW STRUCTURAL COMPONENTS
-========================================== */
-
-.appointment-row:not(:last-child) {
-    border-bottom: 0.5px solid #D3D1C7;
-}
-
-.appointment-summary {
-    display: grid;
-    grid-template-columns: 1.1fr 1.3fr 1.3fr 1.1fr 1.8fr 1fr;
-    align-items: center;
-    min-height: 72px;
-    padding: 0 24px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-.appointment-summary:hover {
-    background: #F8F8F5;
-}
-
-.appointment-col {
-    font-size: 14px;
-    color: #2C2C2A;
-}
-
-.appointment-id {
-    font-weight: 600;
-}
-
-/* ==========================================
-   SCHEDULE COLUMNS (DATE & TIME)
-========================================== */
-
-.schedule-date {
-    font-weight: 600;
-    color: #2C2C2A;
-}
-
-.schedule-time {
-    margin-top: 2px;
-    font-size: 13px;
-    color: #5F5E5A;
-}
-
-/* ==========================================
-   PATIENT META CONTEXTS
-========================================== */
-
-.patient-name {
-    font-weight: 600;
-    color: #2C2C2A;
-}
-
-.patient-email {
-    margin-top: 2px;
-    font-size: 13px;
-    color: #777777;
-    word-break: break-word;
-}
-
-/* ==========================================
-   INTERACTIVE STATUS CONTROL DROPDOWN
-========================================== */
-
-.status-select {
-    width: 100%;
-    height: 38px;
-    padding: 0 12px;
-    border: 1px solid #D3D1C7;
-    border-radius: 8px;
-    background: #FFFFFF;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.status-select:focus {
-    outline: none;
-    border-color: #185FA5;
-    box-shadow: 0 0 0 3px rgba(24, 95, 165, 0.15);
-}
-
-/* ==========================================
-   STATIC VISUAL STATUS BADGES
-========================================== */
-
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 100px;
-    height: 38px;
-    padding: 0 16px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.status-badge.scheduled {
-    background: #E6F1FB;
-    color: #185FA5;
-}
-
-.status-badge.completed {
-    background: #EAF3DE;
-    color: #27500A;
-}
-
-.status-badge.cancelled {
-    background: #FCE8E8;
-    color: #B3261E;
-}
-
-/* ==========================================
-   COLLAPSIBLE DRAWER INFO DETAILS
-========================================== */
-
-.appointment-details {
-    background: #FAFAF8;
-    border-top: 0.5px solid #D3D1C7;
-    padding: 24px;
-}
-
-.details-section:not(:last-child) {
-    margin-bottom: 28px;
-}
-
-.details-section h4 {
-    margin: 0 0 16px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #2C2C2A;
-}
-
-.details-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-}
-
-.detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.detail-item label {
-    font-size: 12px;
-    text-transform: uppercase;
-    color: #888780;
-    font-weight: 500;
-}
-
-.detail-item span {
-    font-size: 14px;
-    color: #2C2C2A;
-}
-
-/* ==========================================
-   GLOBAL INTERACTION CTA BUTTONS
-========================================== */
 
 .primary-btn {
-    height: 44px;
-    border: none;
-    border-radius: 8px;
-    padding: 0 20px;
-    background: #185FA5;
-    color: #FFFFFF;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .primary-btn:hover {
-    background: #0C447C;
+  background-color: #1d4ed8;
 }
 
-/* ==========================================
-   FALLBACK EMPTY DASHBOARD CONTEXTS
-========================================== */
+.content-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
 
+/* --- Real-Time Control Action Toolbar Elements --- */
+.schedule-control-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  gap: 12px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  max-width: 300px;
+  width: 100%;
+  height: 36px;
+}
+
+.search-box input {
+  border: none;
+  padding: 0 12px;
+  font-size: 14px;
+  width: 100%;
+  outline: none;
+  background: transparent;
+}
+
+.search-icon-indicator {
+  background: #f1f5f9;
+  border-left: 1px solid #cbd5e1;
+  color: #64748b;
+  width: 40px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-clear {
+  position: absolute;
+  right: 48px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.date-picker-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-picker-box label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.date-picker-box input[type="date"] {
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 0 10px;
+  font-size: 14px;
+  color: #1e293b;
+  outline: none;
+  background: #ffffff;
+  height: 36px;
+}
+
+/* --- Responsive Layout Directory Grid System --- */
+.section-header {
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #334155;
+}
+
+.appointments-header, 
+.appointment-summary {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1.5fr 1.2fr 2fr 1.2fr;
+  align-items: center;
+  padding: 14px 16px;
+  gap: 12px;
+}
+
+.appointments-header {
+  background-color: #f1f5f9;
+  font-weight: 600;
+  font-size: 13px;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.appointment-row {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s ease;
+}
+
+.appointment-summary {
+  cursor: pointer;
+  font-size: 14px;
+  color: #334155;
+}
+
+.appointment-row:hover .appointment-summary {
+  background-color: #f8fafc;
+}
+
+.appointment-row.is-expanded {
+  background-color: #fdfdfd;
+}
+
+.appointment-id {
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.schedule-date {
+  font-weight: 500;
+}
+
+.schedule-time {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.patient-name {
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.patient-email {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* --- Status Selection Dropdowns and Badges --- */
+.status-select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 13px;
+  background-color: #ffffff;
+  color: #1e293b;
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.status-badge.completed { background-color: #dcfce7; color: #166534; }
+.status-badge.cancelled { background-color: #fee2e2; color: #991b1b; }
+.status-badge.scheduled { background-color: #e0f2fe; color: #0369a1; }
+
+/* --- Dropdown Drawer Detail Panels --- */
+.appointment-details {
+  background-color: #f8fafc;
+  padding: 20px 24px;
+  border-top: 1px solid #e2e8f0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.details-section h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #1e293b;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 6px;
+}
+
+.details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.detail-item label {
+  color: #64748b;
+}
+
+.detail-item span {
+  font-weight: 500;
+  color: #334155;
+}
+
+/* --- Modal Overlays & Backdrop Structures --- */
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 16px; right: 16px;
+  background: none; border: none;
+  font-size: 24px; color: #94a3b8;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 24px 24px 16px 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h2 { margin: 0 0 4px 0; font-size: 20px; color: #0f172a;}
+.modal-header p { margin: 0; color: #64748b; font-size: 13px;}
+
+.modal-body--scrollable {
+  padding: 24px;
+  overflow-y: auto;
+}
+
+/* --- Empty System Workspace States --- */
 .empty-state {
-    background: #FFFFFF;
-    border: 0.5px solid #D3D1C7;
-    border-radius: 12px;
-    padding: 60px 24px;
-    text-align: center;
+  text-align: center;
+  padding: 48px 24px;
+  color: #64748b;
 }
 
 .empty-state h3 {
-    margin: 0 0 8px;
-    color: #2C2C2A;
+  margin: 0 0 6px 0;
+  color: #334155;
+  font-size: 18px;
 }
 
 .empty-state p {
-    margin: 0;
-    color: #5F5E5A;
-}
-
-/* ==========================================
-   MODAL BACKDROP
-========================================== */
-
-.modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    z-index: 9999;
-}
-
-/* ==========================================
-   MODAL CONTAINER
-========================================== */
-
-.modal {
-    width: 100%;
-    max-width: 900px;
-    max-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    background: #FFFFFF;
-    border: 0.5px solid #D3D1C7;
-    border-radius: 12px;
-    overflow: hidden;
-    position: relative;
-}
-
-/* ==========================================
-   CLOSE BUTTON
-========================================== */
-
-.modal-close-btn {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 8px;
-    background: #F1EFE8;
-    cursor: pointer;
-    font-size: 22px;
-    transition: 0.2s;
-}
-
-.modal-close-btn:hover {
-    background: #E6E3D8;
-}
-
-/* ==========================================
-   MODAL HEADER
-========================================== */
-
-.modal-header {
-    padding: 24px;
-    border-bottom: 0.5px solid #D3D1C7;
-}
-
-.modal-header h2 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 700;
-    color: #2C2C2A;
-}
-
-.modal-header p {
-    margin-top: 6px;
-    font-size: 14px;
-    color: #5F5E5A;
-}
-
-/* ==========================================
-   MODAL BODY CONTENT
-========================================== */
-
-.modal-body {
-    padding: 24px;
-}
-
-.modal-body--scrollable {
-    overflow-y: auto;
-}
-
-/* ==========================================
-   MEDIA VIEWPORT BREAKPOINTS
-========================================== */
-
-@media (max-width: 1024px) {
-    .appointments-header,
-    .appointment-summary {
-        grid-template-columns: 1fr 1.2fr 1.2fr 1fr 1.4fr 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .appointments-header {
-        display: none;
-    }
-
-    .appointment-summary {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        padding: 16px;
-        min-height: auto;
-    }
-
-    .appointment-col {
-        width: 100%;
-    }
-
-    .status-select {
-        width: 180px;
-    }
-
-    .details-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .modal {
-        max-width: 100%;
-        max-height: 100vh;
-        border-radius: 0;
-    }
-
-    .modal-backdrop {
-        padding: 0;
-    }
+  margin: 0;
+  font-size: 14px;
 }

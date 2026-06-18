@@ -1,4 +1,5 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal  } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { CreateEmployeePayload, EmployeesResponse } from './employee.model';
 import EmployeeService from './employee.service';
 import { FormBuilder, FormControl, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -10,7 +11,7 @@ import { JoinusService } from '../joinus/joinus.service';
 
 @Component({
   selector: 'app-employee',
-  imports: [UserForm, EmployeeForm, ReactiveFormsModule],
+  imports: [UserForm, EmployeeForm, ReactiveFormsModule, DatePipe],
   templateUrl: './employee.html',
   styleUrl: './employee.css',
 })

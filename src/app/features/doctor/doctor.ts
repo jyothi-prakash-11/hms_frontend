@@ -1,41 +1,52 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { CreateDoctorRequest, DoctorResponse } from './doctor.model';
+import { CreateDoctorRequest, DoctorListItem, FullDoctorDetail } from './doctor.model';
 import { DoctorService } from './doctor.service';
-import { finalize } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize, switchMap, tap } from 'rxjs';
 import { FormControl, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserForm } from '../../shared/components/user-form/user-form';
 import { EmployeeForm } from '../../shared/components/employee-form/employee-form';
 import { DoctorForm } from '../../shared/components/doctor-form/doctor-form';
 import ToastService from '../../shared/components/toast/toast.service';
 import { RolesResponse } from '../auth/auth.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-doctor',
-  imports: [ReactiveFormsModule, UserForm, EmployeeForm, DoctorForm],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, UserForm, EmployeeForm, DoctorForm],
   templateUrl: './doctor.html',
   styleUrls: ['./doctor.css'],
 })
 export class Doctor implements OnInit {
-  //data 
-  doctors = signal<DoctorResponse[]>([]);
-  expandedDoctorEmail = signal<string | null>(null);
-  //status flags
+  // Directory state arrays
+  doctors = signal<DoctorListItem[]>([]);
+  expandedDoctorCode = signal<string | null>(null);
+
+  // Handled Logic in TS: Single active details object and sub-loader tracking signals
+  activeDoctorDetail = signal<FullDoctorDetail | null>(null);
+  isDetailLoading = signal<boolean>(false);
+
+  // Pagination states
+  isLoading = signal<boolean>(false);
+  currentPage = signal<number>(1);
+  totalPages = signal<number>(1);
+  totalRecords = signal<number>(0);
+  itemsPerPage = 10;
+
+  // Modal toggle switches
   showDoctorEmailForm = signal<boolean>(false);
   showDoctorModal = signal<boolean>(false);
   isCheckingDoctor = signal<boolean>(false);
   isCreatingDoctor = signal<boolean>(false);
-  // message placeholders
   doctorStatusMessage = signal<string | null>(null);
-  //form controls
-  //email form control
-  emailControl = new FormControl('',
-    [
-      Validators.required,
-      Validators.email
-    ]
-  );
+
+  // Interactive Form fields
+  searchControl = new FormControl('');
+  emailControl = new FormControl('', [Validators.required, Validators.email]);
+
   doctorRoles = signal<RolesResponse[]>([{ name: 'Doctor' }]);
   private fb = inject(NonNullableFormBuilder);
+
   doctorForm = this.fb.group({
     userInfo: this.fb.group({
       firstName: ['', Validators.required],
@@ -59,46 +70,99 @@ export class Doctor implements OnInit {
       availabilityEndTime: ['']
     })
   });
+
   constructor(private doctorService: DoctorService, private toastService: ToastService) { }
+
   ngOnInit(): void {
-    this.loadDoctors();
-  }
-  loadDoctors() {
-    this.doctorService.getDoctors().subscribe({
+    this.loadDoctors(1, '');
+
+    this.searchControl.valueChanges.pipe(
+      debounceTime(350),
+      distinctUntilChanged(),
+      tap(() => {
+        this.isLoading.set(true);
+        this.currentPage.set(1);
+      }),
+      switchMap(query => this.doctorService.getDoctors(1, this.itemsPerPage, query || ''))
+    ).subscribe({
       next: (res) => {
-        console.log(res);
-        this.doctors.set(res.data);
-        console.log(this.doctors());
+        this.doctors.set(res.data.doctors || []);
+        this.totalPages.set(res.data.pagination.totalPages || 1);
+        this.totalRecords.set(res.data.pagination.total || 0);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.toastService.error('Directory index searching failure.');
+        this.isLoading.set(false);
       }
     });
   }
-  toggleDoctor(email: string) {
-    if (this.expandedDoctorEmail() === email) {
-      this.expandedDoctorEmail.set(null);
+
+  loadDoctors(page: number, search: string) {
+    this.isLoading.set(true);
+    this.doctorService.getDoctors(page, this.itemsPerPage, search).subscribe({
+      next: (res) => {
+        this.doctors.set(res.data.doctors || []);
+        this.totalPages.set(res.data.pagination.totalPages || 1);
+        this.totalRecords.set(res.data.pagination.total || 0);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.toastService.error('Failed to parse database registries.');
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  // Pure Employee Code-driven Toggle UI Control Router
+  toggleDoctor(employeeCode: string) {
+    if (this.expandedDoctorCode() === employeeCode) {
+      this.expandedDoctorCode.set(null);
+      this.activeDoctorDetail.set(null);
       return;
     }
-    this.expandedDoctorEmail.set(email);
+
+    this.expandedDoctorCode.set(employeeCode);
+    this.activeDoctorDetail.set(null); // Wipe outdated reference context clean
+    this.isDetailLoading.set(true);
+
+    this.doctorService.getDoctorByCode(employeeCode).subscribe({
+      next: (res) => {
+        this.activeDoctorDetail.set(res.data);
+        this.isDetailLoading.set(false);
+      },
+      error: (err) => {
+        console.error('API processing exception:', err);
+        this.toastService.error('Unable to fetch detailed registration records.');
+        this.expandedDoctorCode.set(null);
+        this.isDetailLoading.set(false);
+      }
+    });
   }
-  canEdit() {
-    return this.doctorService.canEditDoctor();
+
+  goToPage(direction: number): void {
+    const targetPage = this.currentPage() + direction;
+    if (targetPage < 1 || targetPage > this.totalPages()) return;
+
+    this.currentPage.set(targetPage);
+    this.loadDoctors(targetPage, this.searchControl.value || '');
   }
-  canAdd() {
-    return this.doctorService.canAddDoctor();
-  }
+
+  canEdit() { return this.doctorService.canEditDoctor(); }
+  canAdd() { return this.doctorService.canAddDoctor(); }
+
   openAddDoctor() {
     this.showDoctorEmailForm.set(true);
     this.showDoctorModal.set(false);
   }
+
   checkDoctor() {
     const email = this.emailControl.getRawValue();
-
     this.doctorStatusMessage.set(null);
     this.isCheckingDoctor.set(true);
 
     this.doctorService.checkDoctorExists(email!)
-      .pipe(
-        finalize(() => this.isCheckingDoctor.set(false))
-      )
+      .pipe(finalize(() => this.isCheckingDoctor.set(false)))
       .subscribe({
         next: (res) => {
           if (res.data.exist) {
@@ -115,19 +179,19 @@ export class Doctor implements OnInit {
         }
       });
   }
+
   closeDoctorModal() {
     this.showDoctorModal.set(false);
     this.showDoctorEmailForm.set(false);
     this.doctorForm.controls.userInfo.controls.email.enable();
     this.doctorForm.reset({
-      userInfo: {
-        roleName: 'Doctor'
-      },
+      userInfo: { roleName: 'Doctor' },
       employeeInfo: {},
       doctorInfo: {}
     });
     this.emailControl.reset();
   }
+
   createDoctor() {
     if (this.doctorForm.invalid) {
       this.doctorForm.markAllAsTouched();
@@ -146,19 +210,12 @@ export class Doctor implements OnInit {
       .pipe(
         finalize(() => {
           this.isCreatingDoctor.set(false);
-          setTimeout(() => {
-            this.doctorStatusMessage.set('');
-          }, 5000);
+          setTimeout(() => this.doctorStatusMessage.set(''), 5000);
         })
       )
       .subscribe({
-        next: (res) => {
-          this.doctors.update(
-            doctors => [
-              res.data,
-              ...doctors
-            ]
-          );
+        next: () => {
+          this.loadDoctors(this.currentPage(), this.searchControl.value || '');
           this.toastService.success('Doctor has been created successfully');
           this.closeDoctorModal();
         },
@@ -166,5 +223,8 @@ export class Doctor implements OnInit {
           this.toastService.error(error.error?.message ?? 'Something went wrong');
         }
       });
+  }
+  editDoctor(id:string){
+    
   }
 }

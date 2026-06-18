@@ -1,8 +1,10 @@
 <div class="login-page">
 
-    <div class="login-container">
+    <div class="login-layout">
 
-        <div class="login-branding">
+        <!-- Branding Panel -->
+
+        <section class="branding-panel">
 
             <div class="branding-content">
 
@@ -10,44 +12,48 @@
                     HMS Portal
                 </div>
 
-                <h1>Hospital Management System</h1>
+                <h1>
+                    Hospital Management System
+                </h1>
 
                 <p>
-                    Secure internal operations portal for hospital administration,
-                    doctors, receptionists and staff management.
+                    Secure internal platform for managing patients,
+                    appointments, doctors, employees and hospital operations.
                 </p>
 
-                <div class="branding-actions">
-
-                    <a routerLink="/auth/register" class="join-us-button">
+                <div class="branding-footer">
+                    <a routerLink="/auth/register" class="secondary-btn">
                         Request Access
                     </a>
 
-                    <p>
-                        Staff onboarding and secure internal access management.
-                    </p>
-
+                    <span>
+                        Staff onboarding and access management
+                    </span>
                 </div>
 
             </div>
 
-        </div>
+        </section>
 
-        <div class="login-panel">
+        <!-- Login Panel -->
+
+        <section class="login-panel">
 
             <div class="login-card">
 
                 <div class="login-header">
 
-                    <h2>Welcome Back</h2>
+                    <h2>
+                        Welcome Back
+                    </h2>
 
                     <p>
-                        Login to continue to the internal portal
+                        Sign in to continue to the HMS Portal
                     </p>
 
                 </div>
 
-                <form [formGroup]="loginForm" (submit)="onLogin()" class="login-form-content">
+                <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
 
                     <div class="form-group">
 
@@ -55,8 +61,16 @@
                             Email Address
                         </label>
 
-                        <input id="email" type="email" formControlName="email" placeholder="Enter your email"
-                            class="enterprise-input">
+                        <input id="email" type="email" formControlName="email" placeholder="Enter email address">
+
+                        @if (
+                        loginForm.controls.email.touched &&
+                        loginForm.controls.email.invalid
+                        ) {
+                        <small class="error-text">
+                            Please enter a valid email address
+                        </small>
+                        }
 
                     </div>
 
@@ -74,16 +88,26 @@
 
                         </div>
 
-                        <input id="password" type="password" formControlName="password"
-                            placeholder="Enter your password" class="enterprise-input">
+                        <input id="password" type="password" formControlName="password" placeholder="Enter password">
+
+                        @if (
+                        loginForm.controls.password.touched &&
+                        loginForm.controls.password.invalid
+                        ) {
+                        <small class="error-text">
+                            Password is required
+                        </small>
+                        }
 
                     </div>
 
-                    <div *ngIf="errorMessage" class="error-message">
+                    @if (errorMessage) {
+                    <div class="error-message">
                         {{ errorMessage }}
                     </div>
+                    }
 
-                    <button type="submit" [disabled]="loginForm.invalid" class="login-button">
+                    <button type="submit" class="primary-btn login-btn" [disabled]="loginForm.invalid">
 
                         Login
 
@@ -94,22 +118,18 @@
                 <div class="login-footer">
 
                     <p>
-
                         Need access to the hospital portal?
 
-                        <a routerLink="/auth/register" class="footer-register-link">
-
-                            Request access
-
+                        <a routerLink="/auth/register" class="footer-link">
+                            Request Access
                         </a>
-
                     </p>
 
                 </div>
 
             </div>
 
-        </div>
+        </section>
 
     </div>
 

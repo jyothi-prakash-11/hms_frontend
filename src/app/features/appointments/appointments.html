@@ -25,22 +25,45 @@
                 </div>
             </div>
             <div class="modal-body modal-body--scrollable">
-                <app-add-appointment-form (appointmentCreated)="onAppointmentCreated($event)"></app-add-appointment-form>
+                <app-add-appointment-form
+                    (appointmentCreated)="onAppointmentCreated($event)"></app-add-appointment-form>
             </div>
         </div>
     </div>
     }
 
-    @if (appointments().length === 0) {
-    <div class="empty-state">
-        <h3>No Appointments Found</h3>
-        <p>Create your first appointment.</p>
-    </div>
-    } @else {
     <div class="content-card">
-        <div class="section-header">
-            <h3>Appointment Directory</h3>
+
+        <div class="schedule-control-bar">
+            <div class="search-box">
+                <input type="text" #searchInput [value]="searchQuery()" placeholder="Search Id Name Doctor "
+                    (input)="applyLocalSearch(searchInput.value)" />
+                <span class="search-icon-indicator">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </span>
+                @if (searchQuery()) {
+                <button class="btn-clear" (click)="applyLocalSearch('')">&times;</button>
+                }
+            </div>
+
+            <div class="date-picker-box">
+                <label for="scheduleDate">Date:</label>
+                <input type="date" id="scheduleDate" [value]="selectedDate()"
+                    (change)="onDateChange($any($event.target).value)" />
+            </div>
         </div>
+
+        @if (filteredAppointments().length === 0) {
+        <div class="empty-state">
+            <h3>No Appointments Found</h3>
+            <p>Try selecting an alternative calendar day or adjusting your filter query strings.</p>
+        </div>
+        } @else {
+      
 
         <div class="appointments-header">
             <div>Appointment ID</div>
@@ -51,9 +74,8 @@
             <div>Status</div>
         </div>
 
-        @for (appointment of appointments(); track appointment._id) {
-        <div class="appointment-row">
-
+        @for (appointment of filteredAppointments(); track appointment._id) {
+        <div class="appointment-row" [class.is-expanded]="expandedAppointmentId() === appointment._id">
             <div class="appointment-summary" (click)="toggleAppointment(appointment._id)">
 
                 <div class="appointment-col appointment-id">
@@ -90,7 +112,8 @@
 
                 <div class="appointment-col" (click)="$event.stopPropagation()">
                     @if (appointment.status === 'SCHEDULED') {
-                    <select class="status-select" [value]="appointment.status" [disabled]="!canUpdateAppointment() || isUpdating()"
+                    <select class="status-select" [value]="appointment.status"
+                        [disabled]="!canUpdateAppointment() || isUpdating()"
                         (change)="updateAppointmentStatus(appointment._id, $any($event.target).value)">
                         <option value="SCHEDULED">Scheduled</option>
                         <option value="COMPLETED">Completed</option>
@@ -106,7 +129,6 @@
 
             @if (expandedAppointmentId() === appointment._id) {
             <div class="appointment-details">
-
                 <div class="details-section">
                     <h4>Appointment Information</h4>
                     <div class="details-grid">
@@ -129,10 +151,7 @@
                         @if (appointment.createdBy) {
                         <div class="detail-item">
                             <label>Created By</label>
-                            <span>
-                                {{ appointment.createdBy.firstName }}
-                                {{ appointment.createdBy.lastName }}
-                            </span>
+                            <span>{{ appointment.createdBy.firstName }} {{ appointment.createdBy.lastName }}</span>
                         </div>
                         }
                     </div>
@@ -143,10 +162,8 @@
                     <div class="details-grid">
                         <div class="detail-item">
                             <label>Name</label>
-                            <span>
-                                {{ appointment.patientId.userId.firstName }}
-                                {{ appointment.patientId.userId.lastName }}
-                            </span>
+                            <span>{{ appointment.patientId.userId.firstName }} {{ appointment.patientId.userId.lastName
+                                }}</span>
                         </div>
                         <div class="detail-item">
                             <label>UHID</label>
@@ -168,10 +185,8 @@
                     <div class="details-grid">
                         <div class="detail-item">
                             <label>Doctor</label>
-                            <span>
-                                Dr. {{ appointment.doctorId.employeeId.userId.firstName }}
-                                {{ appointment.doctorId.employeeId.userId.lastName }}
-                            </span>
+                            <span>Dr. {{ appointment.doctorId.employeeId.userId.firstName }} {{
+                                appointment.doctorId.employeeId.userId.lastName }}</span>
                         </div>
                         <div class="detail-item">
                             <label>Department</label>
@@ -183,12 +198,10 @@
                         </div>
                     </div>
                 </div>
-
             </div>
             }
-
         </div>
         }
+        }
     </div>
-    }
 </div>

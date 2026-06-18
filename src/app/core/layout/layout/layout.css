@@ -1,100 +1,150 @@
 /* ==========================================
-   MAIN STRUCTURAL LAYOUT WRAPPER
+   HMS APPLICATION LAYOUT
 ========================================== */
-.layout-wrapper {
+
+.app-layout {
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    height: 100vh; /* Locks framework size strictly to viewport limits */
-    overflow: hidden; /* Prohibits the root window from displaying broken scrollbars */
-    background-color: #F1EFE8; /* Soft warm canvas layout background */
+    overflow: hidden;
+
+    background: #F6F6F4;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        sans-serif;
 }
 
 /* ==========================================
-   GLOBAL NAVBAR STICKY CROSSBAR HEADER
+   HEADER
 ========================================== */
-.global-header {
-    width: 100%;
-    height: 70px; /* Locked explicit layout height dimension boundary */
-    background-color: #FFFFFF;
-    border-bottom: 0.5px solid #D3D1C7;
-    flex-shrink: 0; /* Prevents layout compression when content loads */
-    z-index: 1000;
 
-    /* Internal Flex layout alignments */
+.app-header {
+    height: 64px;
+
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 32px;
-    box-sizing: border-box;
+
+    background: #FFFFFF;
+
+    border-bottom: 1px solid #E5E5E5;
+
+    padding: 0 24px;
+
+    flex-shrink: 0;
 }
 
-/* Forces your interactive profile section component to stick right */
-.global-header app-header-profile,
-.global-header app-profile,
-.global-header .profile-section {
-    margin-left: auto !important;
-}
-
-/* ==========================================
-   UNIFIED HORIZONTAL SIDEBAR + CONTENT HOUSING
-========================================== */
-.main-body-container {
+.header-left {
     display: flex;
-    flex: 1; /* Automatically consumes all remaining viewport height space below header */
-    height: calc(100vh - 70px);
-    overflow: hidden; /* Blocks outer double scrolling layers */
-    width: 100%;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-right {
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+}
+
+.app-logo {
+    font-size: 16px;
+    font-weight: 600;
+
+    color: #2C2C2A;
+
+    letter-spacing: 0.02em;
 }
 
 /* ==========================================
-   LOCKED LEFT SIDEBAR PANEL 
+   SIDEBAR + CONTENT SHELL
 ========================================== */
-.fixed-sidebar {
-    width: 260px;
-    height: 100%;
-    background-color: #FFFFFF;
-    border-right: 0.5px solid #D3D1C7;
-    flex-shrink: 0; /* Stabilizes width block dimensions */
-    overflow-y: auto; /* Adds dedicated tracking scroll mechanics if nav links exceed height */
+
+.app-shell {
+    flex: 1;
+
+    display: flex;
+
+    overflow: hidden;
+
+    min-height: 0;
 }
 
 /* ==========================================
-   DYNAMIC MAIN CONTENT SCROLL AREA 
+   SIDEBAR
 ========================================== */
-.content {
-    flex: 1; /* Claims all remaining layout width across screen rows */
-    height: 100%;
-    padding: 32px;
-    overflow-y: auto; /* CRITICAL LINE: Restricts scroll bar activation solely inside this box */
-    box-sizing: border-box;
+
+.app-sidebar {
+    width: 240px;
+
+    flex-shrink: 0;
+
+    background: #FFFFFF;
+
+    border-right: 1px solid #E5E5E5;
+
+    overflow-y: auto;
 }
 
-/* Box container boundaries */
-.content > * {
-    display: block;
-    max-width: 1400px;
+.app-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.app-sidebar::-webkit-scrollbar-thumb {
+    background: #D8D8D8;
+}
+
+/* ==========================================
+   CONTENT AREA
+========================================== */
+
+.app-content {
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 24px;
+
+    background: #F6F6F4;
+}
+
+.app-content > * {
+    max-width: 1600px;
     margin: 0 auto;
 }
 
 /* ==========================================
-   MOBILE & TABLET RESPONSIVE CONTEXT REBUILD
+   CONTENT SCROLLBAR
 ========================================== */
+
+.app-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.app-content::-webkit-scrollbar-thumb {
+    background: #D8D8D8;
+}
+
+.app-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
 @media (max-width: 992px) {
-    .main-body-container {
-        height: auto;
+
+    .app-sidebar {
+        display: none;
     }
 
-    .fixed-sidebar {
-        display: none; /* Collapses sidebar for typical mobile drawer architectures */
+    .app-content {
+        padding: 16px;
     }
 
-    .global-header {
-        padding: 0 20px;
-    }
-
-    .content {
-        padding: 20px;
-        overflow-y: visible; /* Permits standard native window scrolling engine on mobile screens */
-        height: auto;
+    .app-header {
+        padding: 0 16px;
     }
 }
