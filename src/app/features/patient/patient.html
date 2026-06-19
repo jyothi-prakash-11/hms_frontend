@@ -13,13 +13,18 @@
         }
     </div>
 
-    <div class="toolbar">
-        <div class="search-box">
+    <div class="registry-filter-strip">
+        <div class="search-input-wrapper">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
             <input type="text" placeholder="Search patients..." [ngModel]="searchText()"
-                (ngModelChange)="searchText.set($event)" />
+                (ngModelChange)="searchText.set($event)" class="filter-search-field" />
 
             @if (searchText()) {
-            <button type="button" class="btn-clear" (click)="searchText.set('')">
+            <button type="button" class="filter-clear-btn" (click)="searchText.set('')">
                 &times;
             </button>
             }
@@ -30,14 +35,21 @@
 
         @if (patients().length === 0) {
 
-        <div class="empty-state">
+        <div class="empty-state-card">
+            <div class="empty-state-icon-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
             <h3>No Patients Found</h3>
             <p>No patient records available.</p>
         </div>
 
         } @else {
 
-        <div class="patients-header">
+        <div class="records-grid-header grid-patients">
             <div>UHID</div>
             <div>Patient</div>
             <div>Email</div>
@@ -50,31 +62,31 @@
         track patient.userId?._id || patient.UHID || $index
         ) {
 
-        <div class="patient-card">
+        <div class="record-row-group-container">
 
-            <div class="patient-summary" role="button" tabindex="0"
+            <div class="record-data-row grid-patients" role="button" tabindex="0"
                 (click)="patient.userId?.email && togglePatient(patient.UHID)"
                 (keydown.enter)="patient.userId?.email && togglePatient(patient.UHID)"
                 (keydown.space)="patient.userId?.email && togglePatient(patient.UHID)">
 
-                <div class="patient-col patient-uhid">
+                <div class="record-id-badge">
                     {{ patient.UHID || 'N/A' }}
                 </div>
 
-                <div class="patient-col patient-name">
+                <div class="font-medium-dark">
                     {{ patient.userId?.firstName || '' }}
                     {{ patient.userId?.lastName || '' }}
                 </div>
 
-                <div class="patient-col patient-email">
+                <div class="font-sub-text">
                     {{ patient.userId?.email || 'N/A' }}
                 </div>
 
-                <div class="patient-col">
+                <div>
                     {{ patient.userId?.phone || 'N/A' }}
                 </div>
 
-                <div class="patient-actions" (click)="$event.stopPropagation()"
+                <div class="action-cell-container" (click)="$event.stopPropagation()"
                     (keydown.enter)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()">
 
                     @if (canEditPatient()) {
@@ -92,7 +104,7 @@
             expandedPatientId() === patient.UHID
             ) {
 
-            <div class="patient-details">
+            <div class="record-details-expanded-drawer">
 
                 @if (selectedPatient()) {
 
@@ -138,7 +150,7 @@
 
                 } @else {
 
-                <div class="empty-state">
+                <div class="empty-state-card">
                     <h3>Loading Patient Details...</h3>
                 </div>
 
@@ -152,22 +164,22 @@
 
         }
 
-        <div class="pagination-bar">
+        <div class="pagination-footer-bar">
 
-            <div class="pagination-info">
+            <div class="page-indicator">
                 Showing page
                 <strong>{{ currentPage() }}</strong>
                 of
                 <strong>{{ totalPages() }}</strong>
             </div>
 
-            <div class="pagination-controls">
+            <div class="nav-buttons-cluster">
 
-                <button type="button" class="secondary-btn" [disabled]="currentPage() === 1" (click)="goToPrevPage()">
+                <button type="button" class="pagination-btn" [disabled]="currentPage() === 1" (click)="goToPrevPage()">
                     Previous
                 </button>
 
-                <button type="button" class="secondary-btn" [disabled]="currentPage() === totalPages()"
+                <button type="button" class="pagination-btn" [disabled]="currentPage() === totalPages()"
                     (click)="goToNextPage()">
                     Next
                 </button>

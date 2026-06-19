@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 export class Approvals implements OnInit {
   approvals = signal<Approval[]>([]);
   expandedApprovalId = signal<string | null>(null);
+  activeActionMenuId = signal<string | null>(null);
   successMessage = signal<string | null>(null);
   constructor(private approvalService: ApprovalService) { }
   ngOnInit(): void {
@@ -25,20 +26,29 @@ export class Approvals implements OnInit {
     });
   }
   toggleApproval(id: string) {
+    this.activeActionMenuId.set(null);
     if (this.expandedApprovalId() === id) {
       this.expandedApprovalId.set(null);
       return;
     }
     this.expandedApprovalId.set(id);
   }
+  toggleActionMenu(event: Event, id: string) {
+    event.stopPropagation();
+    this.activeActionMenuId.update(activeId => activeId === id ? null : id);
+  }
+  closeActionMenu() {
+    this.activeActionMenuId.set(null);
+  }
   onApprove(id: string) {
+    this.activeActionMenuId.set(null);
     this.approvalService.approveRequest(id).subscribe({
       next: (res) => {
         console.log(res);
         this.approvals.update(
           approvals => approvals.filter(approval => approval._id !== id)
         );
-        this.successMessage.set('approves sucessfully ');
+        this.successMessage.set('Request approved successfully.');
         setTimeout(() => {
           this.successMessage.set('');
         }, 3000);
@@ -47,9 +57,13 @@ export class Approvals implements OnInit {
     });
   }
   onReject(id: string) {
+    this.activeActionMenuId.set(null);
     this.approvalService.rejectApproval(id).subscribe({
       next: (res) => {
-        this.successMessage.set('approvalrequest rejected ');
+        this.approvals.update(
+          approvals => approvals.filter(approval => approval._id !== id)
+        );
+        this.successMessage.set('Request rejected successfully.');
         setTimeout(() => {
           this.successMessage.set('');
         }, 3000);

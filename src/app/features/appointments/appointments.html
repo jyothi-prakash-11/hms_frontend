@@ -32,40 +32,48 @@
     </div>
     }
 
-    <div class="content-card">
+    <div class="registry-filter-strip">
+        <div class="search-input-wrapper">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" #searchInput [value]="searchQuery()" placeholder="Search ID, patient, or doctor"
+                (input)="applyLocalSearch(searchInput.value)" class="filter-search-field" />
 
-        <div class="schedule-control-bar">
-            <div class="search-box">
-                <input type="text" #searchInput [value]="searchQuery()" placeholder="Search Id Name Doctor "
-                    (input)="applyLocalSearch(searchInput.value)" />
-                <span class="search-icon-indicator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </span>
                 @if (searchQuery()) {
-                <button class="btn-clear" (click)="applyLocalSearch('')">&times;</button>
+                <button class="filter-clear-btn" (click)="applyLocalSearch('')">&times;</button>
                 }
-            </div>
-
-            <div class="date-picker-box">
-                <label for="scheduleDate">Date:</label>
-                <input type="date" id="scheduleDate" [value]="selectedDate()"
-                    (change)="onDateChange($any($event.target).value)" />
-            </div>
         </div>
 
+        <div class="date-pickers-wrapper">
+            <label for="scheduleDate">Date:</label>
+            <input type="date" id="scheduleDate" [value]="selectedDate()"
+                (change)="onDateChange($any($event.target).value)" class="filter-date-picker" />
+        </div>
+    </div>
+
+    <div class="content-card">
+
         @if (filteredAppointments().length === 0) {
-        <div class="empty-state">
+        <div class="empty-state-card">
+            <div class="empty-state-icon-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+            </div>
             <h3>No Appointments Found</h3>
             <p>Try selecting an alternative calendar day or adjusting your filter query strings.</p>
         </div>
         } @else {
       
 
-        <div class="appointments-header">
+        <div class="records-grid-header grid-appointments">
             <div>Appointment ID</div>
             <div>Schedule</div>
             <div>Doctor</div>
@@ -75,42 +83,42 @@
         </div>
 
         @for (appointment of filteredAppointments(); track appointment._id) {
-        <div class="appointment-row" [class.is-expanded]="expandedAppointmentId() === appointment._id">
-            <div class="appointment-summary" (click)="toggleAppointment(appointment._id)">
+        <div class="record-row-group-container" [class.is-expanded]="expandedAppointmentId() === appointment._id">
+            <div class="record-data-row grid-appointments" (click)="toggleAppointment(appointment._id)">
 
-                <div class="appointment-col appointment-id">
+                <div class="record-id-badge">
                     {{ appointment.appointmentId }}
                 </div>
 
-                <div class="appointment-col appointment-schedule">
-                    <div class="schedule-date">
+                <div>
+                    <div class="font-medium-dark">
                         {{ appointment.appointmentDate | date:'dd MMM yyyy' }}
                     </div>
-                    <div class="schedule-time">
+                    <div class="font-sub-text">
                         {{ appointment.appointmentTime }}
                     </div>
                 </div>
 
-                <div class="appointment-col">
+                <div>
                     Dr. {{ appointment.doctorId.employeeId.userId.firstName }}
                     {{ appointment.doctorId.employeeId.userId.lastName }}
                 </div>
 
-                <div class="appointment-col">
+                <div>
                     {{ appointment.doctorId.employeeId.designation }}
                 </div>
 
-                <div class="appointment-col">
-                    <div class="patient-name">
+                <div>
+                    <div class="font-medium-dark">
                         {{ appointment.patientId.userId.firstName }}
                         {{ appointment.patientId.userId.lastName }}
                     </div>
-                    <div class="patient-email">
+                    <div class="font-sub-text">
                         {{ appointment.patientId.userId.email }}
                     </div>
                 </div>
 
-                <div class="appointment-col" (click)="$event.stopPropagation()">
+                <div (click)="$event.stopPropagation()">
                     @if (appointment.status === 'SCHEDULED') {
                     <select class="status-select" [value]="appointment.status"
                         [disabled]="!canUpdateAppointment() || isUpdating()"
@@ -128,7 +136,7 @@
             </div>
 
             @if (expandedAppointmentId() === appointment._id) {
-            <div class="appointment-details">
+            <div class="record-details-expanded-drawer">
                 <div class="details-section">
                     <h4>Appointment Information</h4>
                     <div class="details-grid">

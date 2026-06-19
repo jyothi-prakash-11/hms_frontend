@@ -15,22 +15,22 @@
   border: none;
   cursor: pointer;
   padding: 6px 8px;
-  border-radius: 8px;
+  border-radius: 0;
   transition: background-color 0.15s ease;
   box-sizing: border-box;
 }
 
 .profile-button:hover {
-  background-color: #f7fafc;
+  background-color: var(--hms-surface-muted);
 }
 
 .user-badge-role {
-  background-color: #e6f1fb;
-  color: #185fa5;
-  font-size: 0.75rem;
-  font-weight: 700;
+  background-color: #DBEAFE;
+  color: #1D4ED8;
+  font-size: 12px;
+  font-weight: 500;
   padding: 4px 10px;
-  border-radius: 12px;
+  border-radius: 0;
   text-transform: capitalize;
   white-space: nowrap;
 }
@@ -44,15 +44,15 @@
 }
 
 .user-display-name {
-  font-size: 0.9rem;
+  font-size: 13px;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--hms-text);
   white-space: nowrap;
 }
 
 .user-display-email {
-  font-size: 0.75rem;
-  color: #718096;
+  font-size: 12px;
+  color: var(--hms-text-secondary);
   white-space: nowrap;
 }
 
@@ -60,8 +60,8 @@
 .profile-avatar-icon {
   width: 36px;
   height: 36px;
-  background-color: #185fa5;
-  border-radius: 50%;
+  background-color: var(--hms-primary);
+  border-radius: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,9 +81,9 @@
   right: 0; /* Anchor securely to the right to stop horizontal layout clipping */
   width: 320px;
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e2e8f0;
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid var(--hms-border);
   padding: 20px;
   z-index: 2000;
   box-sizing: border-box;
@@ -93,21 +93,21 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  border-bottom: 1px solid #edf2f7;
+  border-bottom: 1px solid var(--hms-border-subtle);
   padding-bottom: 14px;
   margin-bottom: 16px;
 }
 
 .profile-header h3 {
   margin: 0;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #1a202c;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hms-text);
 }
 
 .role-badge {
-  font-size: 0.8rem;
-  color: #718096;
+  font-size: 12px;
+  color: var(--hms-text-secondary);
 }
 
 /* ==========================================
@@ -130,25 +130,25 @@
 }
 
 .grid-info-cell label {
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  color: #a0aec0;
+  color: var(--hms-text-secondary);
 }
 
 .grid-info-cell p {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 13px;
   font-weight: 500;
-  color: #2d3748;
+  color: var(--hms-text);
   word-break: break-all;
 }
 
 .grid-info-cell .code-highlight {
   font-family: monospace;
   font-weight: 600;
-  color: #1a202c;
+  color: var(--hms-text);
 }
 
 /* ==========================================

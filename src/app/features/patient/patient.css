@@ -1,35 +1,29 @@
-/* ==========================================
-   PAGE
-========================================== */
-
 .page {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    color: var(--hms-text);
 }
 
 .page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
 }
 
 .page-header h1 {
     margin: 0;
     font-size: 24px;
     font-weight: 600;
-    color: #2C2C2A;
+    color: var(--hms-text);
 }
 
 .page-header p {
     margin: 4px 0 0;
     font-size: 13px;
-    color: #6B6B6B;
+    color: var(--hms-text-secondary);
 }
-
-/* ==========================================
-   TOOLBAR
-========================================== */
 
 .toolbar {
     display: flex;
@@ -39,172 +33,117 @@
 .search-box {
     position: relative;
     width: 320px;
+    max-width: 100%;
 }
 
 .search-box input {
     width: 100%;
     height: 36px;
-
     padding: 0 36px 0 12px;
-
-    border: 1px solid #D7D7D7;
-    background: #FFFFFF;
-
+    border: 1px solid var(--hms-border);
+    background: var(--hms-surface);
+    color: var(--hms-text);
     font-size: 13px;
     outline: none;
 }
 
 .search-box input:focus {
-    border-color: #1E5EFF;
+    border-color: var(--hms-primary);
 }
 
 .btn-clear {
     position: absolute;
     right: 10px;
     top: 50%;
-
     transform: translateY(-50%);
-
     border: none;
     background: transparent;
-
     cursor: pointer;
-
     font-size: 18px;
-
-    color: #777;
+    color: var(--hms-text-secondary);
 }
 
-/* ==========================================
-   BUTTONS
-========================================== */
-
-.primary-btn {
+.primary-btn,
+.secondary-btn {
     height: 36px;
-
     padding: 0 16px;
-
-    border: none;
-
-    background: #1E5EFF;
-    color: #FFFFFF;
-
     font-size: 13px;
     font-weight: 500;
-
     cursor: pointer;
+}
+
+.primary-btn {
+    border: none;
+    background: var(--hms-primary);
+    color: #FFFFFF;
 }
 
 .primary-btn:hover {
-    background: #164DE0;
+    background: var(--hms-primary-hover);
 }
 
 .secondary-btn {
-    height: 34px;
-
-    padding: 0 14px;
-
-    border: 1px solid #D8D8D8;
-
-    background: #FFFFFF;
-
-    color: #444;
-
-    font-size: 13px;
-
-    cursor: pointer;
+    border: 1px solid var(--hms-border);
+    background: var(--hms-surface);
+    color: #374151;
 }
 
 .secondary-btn:hover {
-    background: #F7F7F7;
+    background: var(--hms-surface-muted);
 }
 
 button:disabled {
-    opacity: 0.6;
+    color: var(--hms-text-muted);
     cursor: not-allowed;
 }
 
-/* ==========================================
-   CARD
-========================================== */
-
 .content-card {
-    background: #FFFFFF;
-
-    border: 1px solid #E3E3E3;
-
+    background: var(--hms-surface);
+    border: 1px solid var(--hms-border);
     overflow: hidden;
 }
 
-/* ==========================================
-   TABLE HEADER
-========================================== */
-
-.patients-header {
+.patients-header,
+.patient-summary {
     display: grid;
-
-    grid-template-columns:
-        1fr
-        1.8fr
-        2fr
-        1.3fr
-        0.8fr;
-
+    grid-template-columns: 1fr 1.8fr 2fr 1.3fr 0.8fr;
     align-items: center;
-
-    height: 48px;
-
     padding: 0 20px;
-
-    background: #F8F8F8;
-
-    border-bottom: 1px solid #E5E5E5;
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-    text-transform: uppercase;
-
-    color: #666;
 }
 
-/* ==========================================
-   PATIENT ROW
-========================================== */
+.patients-header {
+    height: 48px;
+    background: var(--hms-surface-muted);
+    border-bottom: 1px solid var(--hms-border);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--hms-text-secondary);
+}
 
 .patient-card {
-    border-bottom: 1px solid #ECECEC;
+    border-bottom: 1px solid var(--hms-border-subtle);
+}
+
+.patient-card:last-child {
+    border-bottom: none;
 }
 
 .patient-summary {
-    display: grid;
-
-    grid-template-columns:
-        1fr
-        1.8fr
-        2fr
-        1.3fr
-        0.8fr;
-
-    align-items: center;
-
     min-height: 56px;
-
-    padding: 0 20px;
-
     cursor: pointer;
-
-    transition: background 0.15s ease;
+    font-size: 13px;
 }
 
 .patient-summary:hover {
-    background: #FAFAFA;
+    background: #FAF9F6;
 }
 
 .patient-uhid {
+    font-family: monospace;
+    font-size: 12px;
     font-weight: 600;
-    color: #1E5EFF;
+    color: var(--hms-primary);
 }
 
 .patient-name {
@@ -212,8 +151,7 @@ button:disabled {
 }
 
 .patient-email {
-    color: #666;
-
+    color: var(--hms-text-secondary);
     overflow-wrap: anywhere;
 }
 
@@ -222,24 +160,15 @@ button:disabled {
     justify-content: flex-end;
 }
 
-/* ==========================================
-   DETAILS
-========================================== */
-
 .patient-details {
-    background: #FAFAFA;
-
-    border-top: 1px solid #EAEAEA;
-
+    background: var(--hms-surface-expanded);
+    border-top: 1px solid var(--hms-border-subtle);
     padding: 20px;
 }
 
 .details-grid {
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
 }
 
@@ -251,35 +180,35 @@ button:disabled {
 
 .detail-item label {
     font-size: 12px;
-    color: #777;
+    font-weight: 600;
+    color: var(--hms-text-secondary);
 }
 
 .detail-item span {
     font-size: 13px;
-    color: #2C2C2A;
+    color: var(--hms-text);
 }
 
 .detail-full-width {
     grid-column: span 3;
 }
 
-/* ==========================================
-   PAGINATION
-========================================== */
-
 .pagination-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    padding: 16px 20px;
-
-    border-top: 1px solid #E5E5E5;
+    padding: 14px 20px;
+    background: var(--hms-surface-muted);
+    border-top: 1px solid var(--hms-border);
 }
 
 .pagination-info {
     font-size: 13px;
-    color: #666;
+    color: var(--hms-text-secondary);
+}
+
+.pagination-info strong {
+    color: var(--hms-text);
 }
 
 .pagination-controls {
@@ -287,85 +216,62 @@ button:disabled {
     gap: 8px;
 }
 
-/* ==========================================
-   EMPTY STATE
-========================================== */
-
 .empty-state {
     text-align: center;
-
     padding: 48px 24px;
 }
 
 .empty-state h3 {
     margin: 0 0 8px;
-
-    font-size: 18px;
-    color: #2C2C2A;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--hms-text);
 }
 
 .empty-state p {
     margin: 0;
-
     font-size: 13px;
-    color: #777;
+    color: var(--hms-text-secondary);
 }
-
-/* ==========================================
-   MODAL
-========================================== */
 
 .modal-backdrop {
     position: fixed;
-
     inset: 0;
-
-    background: rgba(0, 0, 0, 0.35);
-
+    background: rgba(0, 0, 0, 0.45);
     display: flex;
     justify-content: center;
     align-items: center;
-
     z-index: 1000;
 }
 
 .modal {
     width: 900px;
     max-width: 95vw;
-
     max-height: 90vh;
-
     overflow: hidden;
-
-    background: #FFFFFF;
-
-    border: 1px solid #DCDCDC;
-
+    background: var(--hms-surface);
+    border: 1px solid var(--hms-border);
     display: flex;
     flex-direction: column;
-
     position: relative;
 }
 
 .modal-header {
-    padding: 18px 24px;
-
-    border-bottom: 1px solid #E5E5E5;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--hms-border);
 }
 
 .modal-header h2 {
     margin: 0;
-
     font-size: 18px;
     font-weight: 600;
+    color: var(--hms-text);
 }
 
 .modal-header p {
-    margin-top: 4px;
-
+    margin: 4px 0 0;
     font-size: 13px;
-
-    color: #777;
+    color: var(--hms-text-secondary);
 }
 
 .modal-body {
@@ -378,28 +284,19 @@ button:disabled {
 
 .modal-close-btn {
     position: absolute;
-
     top: 12px;
     right: 16px;
-
     border: none;
     background: transparent;
-
-    font-size: 28px;
-
+    font-size: 24px;
     cursor: pointer;
-
-    color: #666;
+    color: var(--hms-text-secondary);
 }
-
-/* ==========================================
-   FORM
-========================================== */
 
 .form-card {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
 }
 
 .form-group {
@@ -409,43 +306,68 @@ button:disabled {
 }
 
 .form-group label {
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--hms-text-secondary);
 }
 
 .form-group input {
-    height: 38px;
-
+    height: 40px;
     padding: 0 12px;
-
-    border: 1px solid #D8D8D8;
-
+    border: 1px solid var(--hms-border);
     outline: none;
 }
 
 .form-group input:focus {
-    border-color: #1E5EFF;
+    border-color: var(--hms-primary);
 }
 
 .error-text {
     font-size: 12px;
-    color: #D32F2F;
+    color: var(--hms-danger);
 }
 
 .info-message {
     padding: 10px 12px;
-
-    background: #FFF7E6;
-
-    border: 1px solid #FFD591;
-
+    background: #FEF3C7;
+    border: 1px solid var(--hms-border);
     font-size: 13px;
+    color: #92400E;
 }
 
 .form-footer {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-
     margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+    .page-header,
+    .pagination-bar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .patients-header {
+        display: none;
+    }
+
+    .patient-summary,
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .patient-summary {
+        gap: 8px;
+        padding: 14px 16px;
+    }
+
+    .patient-actions {
+        justify-content: flex-start;
+    }
+
+    .detail-full-width {
+        grid-column: auto;
+    }
 }

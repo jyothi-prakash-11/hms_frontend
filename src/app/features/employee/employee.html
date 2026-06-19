@@ -13,20 +13,25 @@
 
     <div class="content-card">
 
-        <div class="section-header">
-            <h3>Employee Directory</h3>
-        </div>
-
         @if (employees().length === 0) {
 
-        <div class="empty-state">
+        <div class="empty-state-card">
+            <div class="empty-state-icon-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+            </div>
             <h3>No Employees Found</h3>
             <p>Create your first employee record.</p>
         </div>
 
         } @else {
 
-        <div class="employees-header">
+        <div class="records-grid-header grid-employees">
             <div>Employee Code</div>
             <div>Name</div>
             <div>Email</div>
@@ -36,28 +41,28 @@
 
         @for (employee of employees(); track employee.employeeCode) {
 
-        <div class="employee-row">
+        <div class="record-row-group-container">
 
-            <div class="employee-summary" (click)="toggleEmployee(employee.employeeCode)">
+            <div class="record-data-row grid-employees" (click)="toggleEmployee(employee.employeeCode)">
 
-                <div class="employee-col employee-code">
+                <div class="record-id-badge">
                     {{ employee.employeeCode }}
                 </div>
 
-                <div class="employee-col employee-name">
+                <div class="font-medium-dark">
                     {{ employee.userId.firstName }}
                     {{ employee.userId.lastName }}
                 </div>
 
-                <div class="employee-col">
+                <div class="font-sub-text">
                     {{ employee.userId.email }}
                 </div>
 
-                <div class="employee-col">
+                <div>
                     {{ employee.userId.phone }}
                 </div>
 
-                <div class="employee-col">
+                <div>
                     {{ employee.department }}
                 </div>
 
@@ -65,7 +70,7 @@
 
             @if (expandedEmployeeCode() === employee.employeeCode) {
 
-            <div class="employee-details">
+            <div class="record-details-expanded-drawer">
 
                 <div class="details-section">
 

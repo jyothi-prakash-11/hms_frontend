@@ -1,34 +1,22 @@
-/* ==========================================
-   PAGE
-========================================== */
-
 .page {
-    width: 100%;
-}
-
-.page-header {
-    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: var(--hms-text);
 }
 
 .page-header h1 {
-    margin: 0 0 4px;
-
+    margin: 0;
     font-size: 24px;
     font-weight: 600;
-
-    color: #111827;
+    color: var(--hms-text);
 }
 
 .page-header p {
-    margin: 0;
-
+    margin: 4px 0 0;
     font-size: 13px;
-    color: #6B7280;
+    color: var(--hms-text-secondary);
 }
-
-/* ==========================================
-   STATS GRID
-========================================== */
 
 .stats-grid {
     display: grid;
@@ -36,57 +24,39 @@
     gap: 16px;
 }
 
-/* ==========================================
-   STAT CARD
-========================================== */
-
 .stat-card {
-    background: #FFFFFF;
-
-    border: 1px solid #DCD8CC;
-
+    min-height: 120px;
+    background: var(--hms-surface);
+    border: 1px solid var(--hms-border);
     padding: 20px;
 }
 
 .stat-label {
     font-size: 12px;
     font-weight: 600;
-
     text-transform: uppercase;
-    letter-spacing: 0.4px;
-
-    color: #6B7280;
+    color: var(--hms-text-secondary);
 }
 
 .stat-value {
     margin: 12px 0 8px;
-
     font-size: 32px;
     font-weight: 600;
-
-    color: #111827;
+    color: var(--hms-text);
 }
 
 .stat-description {
     font-size: 13px;
-    color: #6B7280;
+    color: var(--hms-text-secondary);
 }
 
-/* ==========================================
-   PENDING APPROVAL CARD
-========================================== */
-
 .pending-card {
-    border-left: 3px solid #D97706;
+    border-left: 3px solid var(--hms-warning);
 }
 
 .pending-card .stat-value {
-    color: #D97706;
+    color: var(--hms-warning);
 }
-
-/* ==========================================
-   RESPONSIVE
-========================================== */
 
 @media (max-width: 1200px) {
     .stats-grid {

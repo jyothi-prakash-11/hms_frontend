@@ -8,11 +8,11 @@
     flex-direction: column;
     overflow: hidden;
 
-    background: #F6F6F4;
+    background: var(--hms-bg);
 
     font-family:
         Inter,
-        "Segoe UI",
+        system-ui,
         sans-serif;
 }
 
@@ -21,14 +21,14 @@
 ========================================== */
 
 .app-header {
-    height: 64px;
+    height: 70px;
 
     display: flex;
     align-items: center;
 
     background: #FFFFFF;
 
-    border-bottom: 1px solid #E5E5E5;
+    border-bottom: 1px solid var(--hms-border);
 
     padding: 0 24px;
 
@@ -52,7 +52,7 @@
     font-size: 16px;
     font-weight: 600;
 
-    color: #2C2C2A;
+    color: var(--hms-text);
 
     letter-spacing: 0.02em;
 }
@@ -76,13 +76,13 @@
 ========================================== */
 
 .app-sidebar {
-    width: 240px;
+    width: 260px;
 
     flex-shrink: 0;
 
     background: #FFFFFF;
 
-    border-right: 1px solid #E5E5E5;
+    border-right: 1px solid var(--hms-border);
 
     overflow-y: auto;
 }
@@ -104,13 +104,13 @@
 
     overflow-y: auto;
 
-    padding: 24px;
+    padding: 32px;
 
-    background: #F6F6F4;
+    background: var(--hms-bg);
 }
 
 .app-content > * {
-    max-width: 1600px;
+    max-width: var(--hms-content-max);
     margin: 0 auto;
 }
 
@@ -141,10 +141,16 @@
     }
 
     .app-content {
-        padding: 16px;
+        padding: 20px;
     }
 
     .app-header {
         padding: 0 16px;
+    }
+}
+
+@media (max-width: 640px) {
+    .app-content {
+        padding: 16px;
     }
 }

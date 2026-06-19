@@ -1,8 +1,8 @@
 <div class="page" (click)="closeDropdowns()">
     <div class="page-header">
         <div>
-            <h1>Daily Medical Charts</h1>
-            <p>Reviewing registry files logged on selected timeline sessions</p>
+            <h1>Health Records</h1>
+            <p>Review medical records by patient, doctor, record ID, and date</p>
         </div>
         <div class="records-counter-badge">
             Total Records: <strong>{{ totalRecords() }}</strong>
@@ -16,7 +16,7 @@
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <input type="text" placeholder="Search Globally by Patient, Doctor or Record ID..."
+            <input type="text" placeholder="Search patient, doctor, or record ID"
                 [formControl]="searchControl" class="filter-search-field" />
         </div>
 
@@ -31,14 +31,14 @@
         @if (isLoading()) {
         <div class="loading-state-wrapper">
             <div class="small-spinner"></div>
-            <p>Syncing directory channels...</p>
+            <p>Loading health records...</p>
         </div>
         } @else if (records().length === 0) {
         <div class="empty-state-card">
             @if (searchControl.value?.trim()) {
             <div class="empty-state-icon-wrapper search-miss">
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
-                    stroke="#64748b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     <line x1="8" y1="11" x2="14" y2="11"></line>
@@ -50,7 +50,7 @@
             } @else {
             <div class="empty-state-icon-wrapper calendar-clear">
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
-                    stroke="#64748b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -58,7 +58,7 @@
                 </svg>
             </div>
             <h3>No Records Logged on This Date</h3>
-            <p>No physician has submitted diagnostic charts matching these criteria parameter paths.</p>
+            <p>No physician has submitted health records for the selected date.</p>
             }
         </div>
         } @else {
@@ -110,7 +110,7 @@
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
-                            View Full Chart
+                            View Record
                         </button>
                     </div>
                     }
@@ -122,7 +122,7 @@
                 @if (isDetailsLoading()) {
                 <div class="drawer-loading-skeleton">
                     <div class="mini-spinner"></div>
-                    <span>Retrieving comprehensive encrypted health logs...</span>
+                    <span>Loading record details...</span>
                 </div>
                 } @else if (activeExpandedRecord(); as fullChart) {
                 <div class="clinical-chart-pad">
@@ -151,16 +151,16 @@
                     <div class="chart-sections-grid">
                         <div class="chart-main-column">
                             <div class="chart-panel-block">
-                                <h5>Complete Diagnostic Manifest</h5>
+                                <h5>Diagnosis</h5>
                                 <p class="unbounded-text-block">{{ fullChart.data?.diagnosis }}</p>
                             </div>
                             <div class="chart-panel-block rx-highlight-block">
-                                <h5>Prescribed Rx Matrix Treatments</h5>
+                                <h5>Prescription</h5>
                                 <p class="unbounded-text-block rx-text">{{ fullChart.data?.prescription }}</p>
                             </div>
                             @if (fullChart.data?.notes) {
                             <div class="chart-panel-block">
-                                <h5>Supplementary Consultation Notes</h5>
+                                <h5>Consultation Notes</h5>
                                 <p class="unbounded-text-block italic-notes">" {{ fullChart.data?.notes }} "</p>
                             </div>
                             }
@@ -168,7 +168,7 @@
 
                         <div class="chart-side-column">
                             <div class="side-info-card patient-demographics">
-                                <h6>Patient Contact Profile</h6>
+                                <h6>Patient Details</h6>
                                 <div class="contact-row">
                                     <span class="contact-lbl">Phone:</span>
                                     <span class="contact-val">{{ fullChart.data?.patientId?.userId?.phone }}</span>
@@ -181,7 +181,7 @@
                             </div>
 
                             <div class="side-info-card doctor-demographics">
-                                <h6>Physician Profile Logs</h6>
+                                <h6>Doctor Details</h6>
                                 <div class="contact-row">
                                     <span class="contact-lbl">Attending:</span>
                                     <span class="contact-val">Dr. {{

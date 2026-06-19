@@ -4,7 +4,7 @@
 
 .sidebar-nav {
     height: 100%;
-    background: #FFFFFF;
+    background: var(--hms-surface);
 }
 
 /* ==========================================
@@ -35,7 +35,7 @@
     display: flex;
     align-items: center;
 
-    height: 44px;
+    height: 40px;
 
     padding: 0 20px;
 
@@ -44,7 +44,7 @@
     font-size: 13px;
     font-weight: 500;
 
-    color: #2C2C2A;
+    color: #374151;
 
     border-left: 3px solid transparent;
 
@@ -58,7 +58,7 @@
 ========================================== */
 
 .nav-item a:hover {
-    background: #FAFAFA;
+    background: var(--hms-surface-muted);
 }
 
 /* ==========================================
@@ -66,13 +66,13 @@
 ========================================== */
 
 .nav-item a.active {
-    background: #F5F8FC;
+    background: var(--hms-surface-muted);
 
-    color: #185FA5;
+    color: var(--hms-text);
 
     font-weight: 600;
 
-    border-left-color: #185FA5;
+    border-left-color: var(--hms-primary);
 }
 
 /* ==========================================

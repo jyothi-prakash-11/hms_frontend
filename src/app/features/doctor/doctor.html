@@ -13,45 +13,50 @@
         }
     </div>
 
-    <div class="content-card">
+    <div class="registry-filter-strip">
+        <div class="search-input-wrapper">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" [formControl]="searchControl" placeholder="Search doctor, email or employee code"
+                class="filter-search-field">
 
-        <div class="schedule-control-bar">
-            <div class="search-box">
-                <input type="text" [formControl]="searchControl" placeholder="Search doctor, email or employee code">
-
-                <span class="search-icon-indicator">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </span>
-
-                @if (searchControl.value) {
-                <button class="btn-clear" type="button" (click)="searchControl.setValue('')">
-                    &times;
-                </button>
-                }
-            </div>
+            @if (searchControl.value) {
+            <button class="filter-clear-btn" type="button" (click)="searchControl.setValue('')">
+                &times;
+            </button>
+            }
         </div>
+    </div>
+
+    <div class="content-card">
 
         @if (isLoading()) {
 
-        <div class="loading-state">
-            <div class="spinner"></div>
+        <div class="loading-state-wrapper">
+            <div class="small-spinner"></div>
             <p>Loading doctors...</p>
         </div>
 
         } @else if (doctors().length === 0) {
 
-        <div class="empty-state">
+        <div class="empty-state-card">
+            <div class="empty-state-icon-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
             <h3>No Doctors Found</h3>
             <p>No doctor records are available.</p>
         </div>
 
         } @else {
 
-        <div class="appointments-header">
+        <div class="records-grid-header grid-doctors">
             <div>Employee Code</div>
             <div>Doctor</div>
             <div>Email</div>
@@ -62,20 +67,20 @@
 
         @for (doctor of doctors(); track doctor._id) {
 
-        <div class="appointment-row" [class.is-expanded]="expandedDoctorCode() === doctor.employeeId.employeeCode">
+        <div class="record-row-group-container" [class.is-expanded]="expandedDoctorCode() === doctor.employeeId.employeeCode">
 
-            <div class="appointment-summary" (click)="toggleDoctor(doctor.employeeId.employeeCode)">
+            <div class="record-data-row grid-doctors" (click)="toggleDoctor(doctor.employeeId.employeeCode)">
 
-                <div class="doctor-code-id">
+                <div class="record-id-badge">
                     {{ doctor.employeeId.employeeCode }}
                 </div>
 
-                <div class="patient-name">
+                <div class="font-medium-dark">
                     Dr. {{ doctor.userId.firstName }}
                     {{ doctor.userId.lastName }}
                 </div>
 
-                <div class="patient-email">
+                <div class="font-sub-text">
                     {{ doctor.userId.email }}
                 </div>
 
@@ -84,10 +89,10 @@
                 </div>
 
                 <div class="fee-text-amount">
-                    ₹{{ doctor.consultationFee }}
+                    INR {{ doctor.consultationFee }}
                 </div>
 
-                <div class="col-actions" (click)="$event.stopPropagation()">
+                <div class="action-cell-container" (click)="$event.stopPropagation()">
 
                     @if (canEdit()) {
                     <button class="secondary-btn" type="button" (click)="editDoctor(doctor.employeeId.employeeCode)">
@@ -100,7 +105,7 @@
 
             @if (expandedDoctorCode() === doctor.employeeId.employeeCode) {
 
-            <div class="appointment-details">
+            <div class="record-details-expanded-drawer">
 
                 @if (isDetailLoading()) {
 
@@ -197,20 +202,20 @@
 
         <div class="pagination-footer-bar">
 
-            <div class="pagination-summary">
+            <div class="page-indicator">
                 Showing page
                 <strong>{{ currentPage() }}</strong>
                 of
                 <strong>{{ totalPages() }}</strong>
             </div>
 
-            <div class="pagination-actions">
+            <div class="nav-buttons-cluster">
 
-                <button class="nav-btn" [disabled]="currentPage() === 1 || isLoading()" (click)="goToPage(-1)">
+                <button class="pagination-btn" [disabled]="currentPage() === 1 || isLoading()" (click)="goToPage(-1)">
                     Previous
                 </button>
 
-                <button class="nav-btn" [disabled]="currentPage() === totalPages() || isLoading()"
+                <button class="pagination-btn" [disabled]="currentPage() === totalPages() || isLoading()"
                     (click)="goToPage(1)">
                     Next
                 </button>
