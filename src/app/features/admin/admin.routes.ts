@@ -6,6 +6,7 @@ import { Approvals } from "./approvals/approvals";
 import { Doctor } from "../doctor/doctor";
 import { Employee } from "../employee/employee";
 import { Appointments } from "../appointments/appointments";
+import { HealthRecord } from "../../health-record/component/health-record";
 
 export const ADMIN_ROUTES: Routes = [
     {
@@ -31,5 +32,9 @@ export const ADMIN_ROUTES: Routes = [
     {
         path: 'appointments',
         component: Appointments
+    },
+    {
+        path:'healthrecords',
+        component:HealthRecord
     }
 ]

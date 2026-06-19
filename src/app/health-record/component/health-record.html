@@ -1,0 +1,223 @@
+<div class="page" (click)="closeDropdowns()">
+    <div class="page-header">
+        <div>
+            <h1>Daily Medical Charts</h1>
+            <p>Reviewing registry files logged on selected timeline sessions</p>
+        </div>
+        <div class="records-counter-badge">
+            Total Records: <strong>{{ totalRecords() }}</strong>
+        </div>
+    </div>
+
+    <div class="registry-filter-strip">
+        <div class="search-input-wrapper">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" placeholder="Search Globally by Patient, Doctor or Record ID..."
+                [formControl]="searchControl" class="filter-search-field" />
+        </div>
+
+        <div class="date-pickers-wrapper">
+            <input type="date" [value]="fromDate()" (change)="onDateRangeChange($any($event.target).value)"
+                class="filter-date-picker" />
+        </div>
+    </div>
+
+    <div class="content-card">
+
+        @if (isLoading()) {
+        <div class="loading-state-wrapper">
+            <div class="small-spinner"></div>
+            <p>Syncing directory channels...</p>
+        </div>
+        } @else if (records().length === 0) {
+        <div class="empty-state-card">
+            @if (searchControl.value?.trim()) {
+            <div class="empty-state-icon-wrapper search-miss">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="#64748b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+            </div>
+            <h3>No Records Found</h3>
+            <p>We couldn't find any medical registries matching "<strong>{{ searchControl.value }}</strong>". Check
+                spelling or try searching another identifier.</p>
+            } @else {
+            <div class="empty-state-icon-wrapper calendar-clear">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="#64748b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+            </div>
+            <h3>No Records Logged on This Date</h3>
+            <p>No physician has submitted diagnostic charts matching these criteria parameter paths.</p>
+            }
+        </div>
+        } @else {
+        <div class="records-grid-header">
+            <div>Record ID</div>
+            <div>Patient Info</div>
+            <div>Treating Doctor</div>
+            <div>Diagnosis</div>
+            <div style="text-align: right;">Actions</div>
+        </div>
+
+        @for (record of records(); track record._id) {
+        <div class="record-row-group-container" [class.is-expanded]="expandedRecordId() === record._id">
+
+            <div class="record-data-row">
+                <div class="record-id-badge">{{ record.healthrecordId }}</div>
+
+                <div>
+                    <div class="font-medium-dark">{{ record.patientId?.userId?.firstName }} {{
+                        record.patientId?.userId?.lastName }}</div>
+                    <div class="font-sub-text">{{ record.patientId?.userId?.email }}</div>
+                </div>
+
+                <div>
+                    <div class="font-medium-dark">Dr. {{ record.doctorId?.employeeId?.userId?.firstName }} {{
+                        record.doctorId?.employeeId?.userId?.lastName }}</div>
+                    <div class="department-inline-tag">{{ record.doctorId?.employeeId?.department }}</div>
+                </div>
+
+                <div class="truncate-cell" [attr.title]="record.diagnosis">{{ record.diagnosis }}</div>
+
+                <div class="action-cell-container">
+                    <button type="button" class="three-dots-trigger-btn"
+                        (click)="toggleOptionsMenu($event, record._id)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="1"></circle>
+                            <circle cx="12" cy="5" r="1"></circle>
+                            <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
+                    </button>
+
+                    @if (activeMenuRecordId() === record._id) {
+                    <div class="absolute-dropdown-menu" (click)="$event.stopPropagation()">
+                        <button type="button" class="dropdown-item"
+                            (click)="triggerChartExpansion(record.healthrecordId)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            View Full Chart
+                        </button>
+                    </div>
+                    }
+                </div>
+            </div>
+
+            @if (expandedRecordId() === record._id) {
+            <div class="record-details-expanded-drawer">
+                @if (isDetailsLoading()) {
+                <div class="drawer-loading-skeleton">
+                    <div class="mini-spinner"></div>
+                    <span>Retrieving comprehensive encrypted health logs...</span>
+                </div>
+                } @else if (activeExpandedRecord(); as fullChart) {
+                <div class="clinical-chart-pad">
+
+                    <div class="metadata-summary-strip">
+                        <div class="meta-item">
+                            <span class="meta-label">Patient UHID:</span>
+                            <span class="meta-value">{{ fullChart.data?.patientId?.UHID }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Appt ID:</span>
+                            <span class="meta-value-mono">{{ fullChart.data?.appointmentId?.appointmentId }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Blood Group:</span>
+                            <span class="meta-value-badge">{{ fullChart.data?.patientId?.bloodGroup }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Gender:</span>
+                            <span class="meta-value">{{ fullChart.data?.patientId?.gender }}</span>
+                        </div>
+                    </div>
+
+                    <hr class="chart-divider" />
+
+                    <div class="chart-sections-grid">
+                        <div class="chart-main-column">
+                            <div class="chart-panel-block">
+                                <h5>Complete Diagnostic Manifest</h5>
+                                <p class="unbounded-text-block">{{ fullChart.data?.diagnosis }}</p>
+                            </div>
+                            <div class="chart-panel-block rx-highlight-block">
+                                <h5>Prescribed Rx Matrix Treatments</h5>
+                                <p class="unbounded-text-block rx-text">{{ fullChart.data?.prescription }}</p>
+                            </div>
+                            @if (fullChart.data?.notes) {
+                            <div class="chart-panel-block">
+                                <h5>Supplementary Consultation Notes</h5>
+                                <p class="unbounded-text-block italic-notes">" {{ fullChart.data?.notes }} "</p>
+                            </div>
+                            }
+                        </div>
+
+                        <div class="chart-side-column">
+                            <div class="side-info-card patient-demographics">
+                                <h6>Patient Contact Profile</h6>
+                                <div class="contact-row">
+                                    <span class="contact-lbl">Phone:</span>
+                                    <span class="contact-val">{{ fullChart.data?.patientId?.userId?.phone }}</span>
+                                </div>
+                                <div class="contact-row">
+                                    <span class="contact-lbl">DOB:</span>
+                                    <span class="contact-val">{{ fullChart.data?.patientId?.dob | date:'mediumDate'
+                                        }}</span>
+                                </div>
+                            </div>
+
+                            <div class="side-info-card doctor-demographics">
+                                <h6>Physician Profile Logs</h6>
+                                <div class="contact-row">
+                                    <span class="contact-lbl">Attending:</span>
+                                    <span class="contact-val">Dr. {{
+                                        fullChart.data?.doctorId?.employeeId?.userId?.firstName }} {{
+                                        fullChart.data?.doctorId?.employeeId?.userId?.lastName }}</span>
+                                </div>
+                                <div class="contact-row">
+                                    <span class="contact-lbl">Emp Code:</span>
+                                    <span class="contact-val-mono">{{ fullChart.data?.doctorId?.employeeId?.employeeCode
+                                        }}</span>
+                                </div>
+                                <div class="contact-row">
+                                    <span class="contact-lbl">Specialty:</span>
+                                    <span class="contact-val">{{ fullChart.data?.doctorId?.specialization }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                }
+            </div>
+            }
+
+        </div>
+        }
+
+        <div class="pagination-footer-bar">
+            <div class="page-indicator">Page <strong>{{ currentPage() }}</strong> of {{ totalPages() }}</div>
+            <div class="nav-buttons-cluster">
+                <button class="pagination-btn" [disabled]="currentPage() === 1 || isLoading()"
+                    (click)="onPageChange(currentPage() - 1)">Previous</button>
+                <button class="pagination-btn" [disabled]="currentPage() === totalPages() || isLoading()"
+                    (click)="onPageChange(currentPage() + 1)">Next</button>
+            </div>
+        </div>
+        }
+    </div>
+</div>
