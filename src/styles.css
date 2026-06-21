@@ -222,10 +222,29 @@ textarea:focus-visible {
 }
 
 .record-id-badge {
+  display: inline-flex;
+  align-items: center;
   font-family: monospace;
   font-size: 12px;
   font-weight: 600;
-  color: var(--hms-primary);
+  color: var(--hms-text);
+  background: var(--hms-surface-muted);
+  border: 1px solid var(--hms-border);
+  padding: 3px 8px;
+  width: fit-content;
+}
+
+.detail-item .record-id-badge,
+.meta-item .record-id-badge,
+.contact-row .record-id-badge,
+.grid-info-cell .record-id-badge,
+small .record-id-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--hms-text);
   background: var(--hms-surface-muted);
   border: 1px solid var(--hms-border);
   padding: 3px 8px;

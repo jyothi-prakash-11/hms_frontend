@@ -342,6 +342,40 @@ button:disabled {
     margin-top: 20px;
 }
 
+.modal-footer-action-strip {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.primary-accent-btn {
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid var(--hms-primary);
+    background: var(--hms-primary);
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.primary-accent-btn:hover:not(:disabled) {
+    background: var(--hms-primary-hover);
+}
+
+.inline-button-spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+    border: 2px solid var(--hms-border);
+    border-top-color: #FFFFFF;
+    border-radius: 50%;
+    vertical-align: -2px;
+    animation: spinLoader 0.6s linear infinite;
+}
+
 @media (max-width: 900px) {
     .page-header,
     .pagination-bar {

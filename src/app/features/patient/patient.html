@@ -1,4 +1,4 @@
-<div class="page">
+<div class="page" (click)="closePatientActionMenu()">
 
     <div class="page-header">
         <div>
@@ -90,9 +90,23 @@
                     (keydown.enter)="$event.stopPropagation()" (keydown.space)="$event.stopPropagation()">
 
                     @if (canEditPatient()) {
-                    <button class="secondary-btn" type="button">
-                        Edit
+                    <button type="button" class="three-dots-trigger-btn"
+                        (click)="togglePatientActionMenu($event, patient.UHID)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="1"></circle>
+                            <circle cx="12" cy="5" r="1"></circle>
+                            <circle cx="12" cy="19" r="1"></circle>
+                        </svg>
                     </button>
+
+                    @if (activeMenuPatientId() === patient.UHID) {
+                    <div class="absolute-dropdown-menu" (click)="$event.stopPropagation()">
+                        <button type="button" class="dropdown-item" (click)="onPatientEditModal(patient.UHID)">
+                            Edit
+                        </button>
+                    </div>
+                    }
                     }
 
                 </div>
@@ -112,7 +126,7 @@
 
                     <div class="detail-item">
                         <label>UHID</label>
-                        <span>{{ selectedPatient()?.UHID }}</span>
+                        <span class="record-id-badge">{{ selectedPatient()?.UHID }}</span>
                     </div>
 
                     <div class="detail-item">
@@ -200,7 +214,7 @@
 
     <div class="modal">
 
-        <button type="button" class="modal-close-btn" (click)="closeModal()">
+        <button type="button" class="modal-close-btn" (click)="closePatientModal()">
             &times;
         </button>
 
@@ -257,14 +271,16 @@
 
         <div class="modal-header">
             <div>
-                <h2>Add Patient</h2>
-                <p>Register a new patient.</p>
+                <h2>{{ isEditingMode() ? 'Edit Patient' : 'Add Patient' }}</h2>
+                <p>{{ isEditingMode() ? 'Update patient registration details.' : 'Register a new patient.' }}</p>
             </div>
         </div>
 
         <div class="modal-body modal-body--scrollable">
 
-            <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="patient-form">
+            <form [formGroup]="patientForm"
+                (ngSubmit)="isEditingMode() ? submitPatientUpdate() : submitPatientRegistration()"
+                class="patient-form">
 
                 <app-user-form [form]="patientForm.controls.userFields" [roles]="[]" [hideRole]="true">
                 </app-user-form>
@@ -272,22 +288,31 @@
                 <app-patient-from [form]="patientForm.controls.patientFields">
                 </app-patient-from>
 
-                <div class="form-footer">
-
-                    <button type="button" class="secondary-btn" (click)="closeModal()">
+                <div class="modal-footer-action-strip">
+                    <button type="button" class="secondary-btn" [disabled]="isSavingPatient()"
+                        (click)="closePatientModal()">
                         Cancel
                     </button>
 
-                    <button type="submit" class="primary-btn" [disabled]="patientForm.invalid || isCreatingPatient()">
-
-                        {{
-                        isCreatingPatient()
-                        ? 'Registering Patient...'
-                        : 'Register Patient'
-                        }}
-
+                    @if (isEditingMode()) {
+                    <button type="button" class="primary-accent-btn update-btn" [disabled]="isSavingPatient()"
+                        (click)="submitPatientUpdate()">
+                        @if (isSavingPatient()) {
+                        <span class="inline-button-spinner"></span> Updating...
+                        } @else {
+                        Save Changes
+                        }
                     </button>
-
+                    } @else {
+                    <button type="button" class="primary-accent-btn register-btn" [disabled]="isSavingPatient()"
+                        (click)="submitPatientRegistration()">
+                        @if (isSavingPatient()) {
+                        <span class="inline-button-spinner"></span> Registering...
+                        } @else {
+                        Register Patient
+                        }
+                    </button>
+                    }
                 </div>
 
             </form>

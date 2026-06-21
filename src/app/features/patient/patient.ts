@@ -19,6 +19,7 @@ export class Patient implements OnInit {
   patients = signal<PatientSummary[]>([]);
   selectedPatient = signal<PatientDetails | null>(null);
   expandedPatientId = signal<string | null>(null);
+  activeMenuPatientId = signal<string | null>(null);
   showPatientForm = signal(false);
   showEmailCheckingForm = signal(false);
   roles = signal<RolesResponse[]>([]);
@@ -30,6 +31,10 @@ export class Patient implements OnInit {
   // Async Form Pending Load Trackers
   isCheckingPatient = signal(false);
   isCreatingPatient = signal(false);
+  isUpdatingPatient = signal(false);
+  editingPatientUhid = signal<string | null>(null);
+  isEditingMode = computed(() => !!this.editingPatientUhid());
+  isSavingPatient = computed(() => this.isCreatingPatient() || this.isUpdatingPatient());
 
   // Notifications & Feedback Messages
   statusMessage = signal<string | null>('');
@@ -101,6 +106,8 @@ export class Patient implements OnInit {
   }
 
   togglePatient(patientUhid: string): void {
+    this.closePatientActionMenu();
+
     if (this.expandedPatientId() === patientUhid) {
       this.expandedPatientId.set(null);
       this.selectedPatient.set(null);
@@ -131,12 +138,23 @@ export class Patient implements OnInit {
     return this.patientService.canAddPatient();
   }
 
+  togglePatientActionMenu(event: Event, patientUhid: string): void {
+    event.stopPropagation();
+    this.activeMenuPatientId.update(current => current === patientUhid ? null : patientUhid);
+  }
+
+  closePatientActionMenu(): void {
+    this.activeMenuPatientId.set(null);
+  }
+
   onAddPatient(): void {
+    this.editingPatientUhid.set(null);
     this.emailControl.reset();
     this.statusMessage.set('');
     this.showEmailCheckingForm.set(true);
     this.showPatientForm.set(false);
     this.patientForm.reset();
+    this.patientForm.controls.userFields.controls.email.enable();
     document.body.style.overflow = 'hidden';
   }
 
@@ -170,6 +188,10 @@ export class Patient implements OnInit {
   }
 
   onSubmit(): void {
+    this.submitPatientRegistration();
+  }
+
+  submitPatientRegistration(): void {
     if (this.patientForm.invalid) {
       this.patientForm.markAllAsTouched();
       return;
@@ -196,10 +218,85 @@ export class Patient implements OnInit {
     });
   }
 
+  submitPatientUpdate(): void {
+    const targetUhid = this.editingPatientUhid();
+    if (!targetUhid) return;
+
+    if (this.patientForm.invalid) {
+      this.patientForm.markAllAsTouched();
+      return;
+    }
+
+    this.isUpdatingPatient.set(true);
+    const userValues = this.patientForm.controls.userFields.getRawValue();
+    const patientValues = this.patientForm.controls.patientFields.getRawValue();
+    const payload: Partial<CreatePatientRequest> = {
+      ...userValues,
+      ...patientValues
+    };
+
+    this.patientService.updatePatient(targetUhid, payload).subscribe({
+      next: () => {
+        this.isUpdatingPatient.set(false);
+        this.closePatientModal();
+        this.loadPatients(this.currentPage(), this.searchText());
+      },
+      error: (err) => {
+        this.isUpdatingPatient.set(false);
+        console.error('Patient update processing fault:', err);
+      }
+    });
+  }
+
+  onPatientEditModal(patientId: string) {
+    this.closePatientActionMenu();
+    this.patientService.getPatientByUhid(patientId)
+      .subscribe(
+        {
+          next: (res) => {
+            const patient: PatientDetails = res.data;
+            this.editingPatientUhid.set(patient.UHID);
+            this.patientForm.patchValue(
+              {
+                userFields: {
+                  firstName: patient.userId?.firstName || '',
+                  lastName: patient.userId?.lastName || '',
+                  email: patient.userId?.email || '',
+                  phone: patient.userId?.phone || '',
+                  roleName: 'Patient'
+                },
+                patientFields: {
+                  gender: patient.gender || '',
+                  dob: patient.dob ? new Date(patient.dob).toISOString().substring(0, 10) : '',
+                  bloodGroup: patient.bloodGroup || '',
+                  address: patient.address || '',
+                  emergencyContactName: patient.emergencyContactName || '',
+                  emergencyContactPhone: patient.emergencyContactPhone || ''
+                }
+              }
+            );
+            this.patientForm.markAsPristine();
+            this.patientForm.markAsUntouched();
+            this.patientForm.controls.userFields.controls.email.disable();
+            this.showEmailCheckingForm.set(false);
+            this.showPatientForm.set(true);
+            document.body.style.overflow = 'hidden';
+          }
+        }
+      )
+  }
+
+  closePatientModal(): void {
+    this.closeModal();
+  }
+
   closeModal(): void {
     this.showEmailCheckingForm.set(false);
     this.showPatientForm.set(false);
+    this.editingPatientUhid.set(null);
+    this.isUpdatingPatient.set(false);
     this.patientForm.reset();
+    this.patientForm.controls.userFields.controls.email.enable();
     this.emailControl.reset();
     this.statusMessage.set('');
     document.body.style.overflow = 'auto';

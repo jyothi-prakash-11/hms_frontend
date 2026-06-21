@@ -20,7 +20,7 @@
                                 {{ patient.userId?.firstName }} {{ patient.userId?.lastName }}
                             </strong>
                             <small>
-                                {{ patient.UHID }} • {{ patient.userId?.email }}
+                                <span class="record-id-badge">{{ patient.UHID }}</span> • {{ patient.userId?.email }}
                             </small>
                         </div>
                         }
@@ -32,7 +32,7 @@
                             <strong>
                                 {{ selectedPatient()?.userId?.firstName }} {{ selectedPatient()?.userId?.lastName }}
                             </strong>
-                            <small>UHID: {{ selectedPatient()?.UHID }}</small>
+                            <small>UHID: <span class="record-id-badge">{{ selectedPatient()?.UHID }}</span></small>
                         </div>
                         <button type="button" class="remove-btn" (click)="clearPatient()">×</button>
                     </div>

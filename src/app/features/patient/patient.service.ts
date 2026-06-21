@@ -33,4 +33,7 @@ export class PatientService {
     createPatient(payload: CreatePatientRequest){
         return this.http.post<ApiResponse<PatientSummary>>(`${this.BASE_URL}/`,payload);
     }
+    updatePatient(uhid: string, payload: Partial<CreatePatientRequest>) {
+        return this.http.put<ApiResponse<PatientSummary>>(`${this.BASE_URL}/${uhid}`, payload);
+    }
 }
